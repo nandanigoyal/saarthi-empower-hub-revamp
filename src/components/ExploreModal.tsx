@@ -1,4 +1,5 @@
-import { X, Star, Users, Calendar, Stethoscope, FileText, Heart, Shield } from 'lucide-react';
+
+import { X, Star, Users, Calendar, Stethoscope, FileText, Heart, Shield, Activity, Database, Building2, Syringe, MessageCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 interface ExploreModalProps {
@@ -73,37 +74,43 @@ const ExploreModal = ({ isOpen, onClose }: ExploreModalProps) => {
   ];
 
   const features = [
-    { icon: Calendar, name: "Period Tracking", users: "25k+" },
-    { icon: Stethoscope, name: "Doctor Consultations", users: "18k+" },
-    { icon: FileText, name: "Health Records", users: "30k+" },
-    { icon: Shield, name: "Govt. Schemes", users: "8k+" },
-    { icon: Heart, name: "Peer Support", users: "15k+" },
-    { icon: Users, name: "Community", users: "50k+" }
+    { icon: Calendar, name: "SheCycle+", users: "25k+", color: "from-rose-400 to-pink-500" },
+    { icon: Activity, name: "SymptoScan", users: "18k+", color: "from-blue-400 to-cyan-500" },
+    { icon: Stethoscope, name: "GynConnect", users: "12k+", color: "from-emerald-400 to-green-500" },
+    { icon: Database, name: "MediVault", users: "30k+", color: "from-purple-400 to-violet-500" },
+    { icon: Shield, name: "HealthYojana", users: "8k+", color: "from-amber-400 to-orange-500" },
+    { icon: Building2, name: "NGOHeal", users: "15k+", color: "from-teal-400 to-cyan-500" },
+    { icon: MessageCircle, name: "CareCircle", users: "20k+", color: "from-indigo-400 to-purple-500" },
+    { icon: Heart, name: "VaxAlert", users: "10k+", color: "from-pink-400 to-rose-500" }
   ];
 
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content max-w-4xl max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
-        {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-border/50">
-          <div>
-            <h2 className="text-2xl font-bold text-foreground">Explore Women's Experiences</h2>
-            <p className="text-muted-foreground mt-1">Real stories from real women using Saarthi</p>
+        {/* Header with attractive background */}
+        <div className="bg-gradient-hero text-white p-6 rounded-t-2xl">
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className="text-2xl font-bold">Explore Women's Experiences</h2>
+              <p className="text-white/80 mt-1">Real stories from real women using Saarthi</p>
+            </div>
+            <Button variant="secondary" size="icon" onClick={onClose}>
+              <X className="w-6 h-6" />
+            </Button>
           </div>
-          <Button variant="ghost" size="icon" onClick={onClose}>
-            <X className="w-6 h-6" />
-          </Button>
         </div>
 
-        {/* Features Overview */}
-        <div className="p-6 border-b border-border/50">
-          <h3 className="text-lg font-semibold mb-4">Our Services</h3>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+        {/* Features Overview with attractive visuals */}
+        <div className="p-6 bg-gradient-warm border-b border-border/50">
+          <h3 className="text-lg font-semibold mb-4 text-center">Our Complete Service Suite</h3>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {features.map((feature, index) => (
-              <div key={index} className="card-elegant p-4 text-center">
-                <feature.icon className="w-8 h-8 text-primary mx-auto mb-2" />
-                <h4 className="font-medium text-sm">{feature.name}</h4>
-                <p className="text-xs text-muted-foreground">{feature.users} users</p>
+              <div key={index} className="card-feature p-4 text-center group hover:scale-105 transition-all duration-300">
+                <div className={`w-12 h-12 rounded-2xl bg-gradient-to-r ${feature.color} flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform duration-300`}>
+                  <feature.icon className="w-6 h-6 text-white" />
+                </div>
+                <h4 className="font-medium text-sm text-foreground">{feature.name}</h4>
+                <p className="text-xs text-muted-foreground mt-1">{feature.users} users</p>
               </div>
             ))}
           </div>
@@ -114,12 +121,12 @@ const ExploreModal = ({ isOpen, onClose }: ExploreModalProps) => {
           <h3 className="text-lg font-semibold mb-4">What Women Are Saying</h3>
           <div className="space-y-4">
             {experiences.map((exp) => (
-              <div key={exp.id} className="card-feature p-4">
+              <div key={exp.id} className="card-elegant p-4 hover:shadow-elegant transition-all duration-300">
                 <div className="flex items-start gap-4">
                   <img 
                     src={exp.image} 
                     alt={exp.name}
-                    className="w-12 h-12 rounded-full object-cover"
+                    className="w-12 h-12 rounded-full object-cover border-2 border-primary/20"
                   />
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
@@ -132,7 +139,7 @@ const ExploreModal = ({ isOpen, onClose }: ExploreModalProps) => {
                     </div>
                     <p className="text-sm text-muted-foreground mb-2">{exp.location}</p>
                     
-                    {/* Rating */}
+                    {/* Rating with better styling */}
                     <div className="flex items-center gap-1 mb-2">
                       {[...Array(5)].map((_, i) => (
                         <Star 
@@ -144,7 +151,7 @@ const ExploreModal = ({ isOpen, onClose }: ExploreModalProps) => {
                     </div>
                     
                     <div className="mb-2">
-                      <span className="text-xs bg-accent/20 text-accent-foreground px-2 py-1 rounded-full">
+                      <span className="text-xs bg-gradient-to-r from-accent/20 to-primary/20 text-accent-foreground px-3 py-1 rounded-full border border-accent/30">
                         {exp.service}
                       </span>
                     </div>
@@ -157,14 +164,14 @@ const ExploreModal = ({ isOpen, onClose }: ExploreModalProps) => {
           </div>
         </div>
 
-        {/* CTA Footer */}
-        <div className="p-6 border-t border-border/50 bg-gradient-warm">
+        {/* CTA Footer with attractive design */}
+        <div className="p-6 bg-gradient-hero text-white rounded-b-2xl">
           <div className="text-center">
             <h3 className="text-lg font-semibold mb-2">Ready to Start Your Journey?</h3>
-            <p className="text-muted-foreground mb-4">Join thousands of women who trust Saarthi for their health</p>
+            <p className="text-white/80 mb-4">Join thousands of women who trust Saarthi for their health</p>
             <div className="flex gap-3 justify-center">
-              <Button className="btn-hero">Get Started Today</Button>
-              <Button variant="outline">Learn More</Button>
+              <Button className="bg-white text-primary hover:bg-white/90">Get Started Today</Button>
+              <Button variant="outline" className="border-white text-white hover:bg-white/10">Learn More</Button>
             </div>
           </div>
         </div>

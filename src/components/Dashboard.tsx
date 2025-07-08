@@ -1,53 +1,101 @@
-import { Calendar, Heart, FileText, Users, TrendingUp, Bell, Settings, HelpCircle } from 'lucide-react';
+
+import { Calendar, Heart, FileText, Users, TrendingUp, Bell, Settings, HelpCircle, ExternalLink, Activity, Database, Building2, Syringe, MessageCircle, Shield, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
+import { useState } from 'react';
 
 interface DashboardProps {
   userName: string;
 }
 
 const Dashboard = ({ userName }: DashboardProps) => {
-  const quickActions = [
+  const [showProfilePopup, setShowProfilePopup] = useState(false);
+
+  const personalizedFeatures = [
     {
       icon: Calendar,
-      title: "Track Period",
-      description: "Log your cycle data",
-      action: "Track Now",
-      color: "from-pink-400 to-red-400"
+      title: "SheCycle+",
+      description: "Track your period & mood",
+      progress: 85,
+      lastUsed: "2 days ago",
+      color: "from-rose-400 to-pink-500",
+      link: "https://feminine-she-care-vpg6.vercel.app/"
+    },
+    {
+      icon: Activity,
+      title: "SymptoScan",
+      description: "AI health insights",
+      progress: 70,
+      lastUsed: "5 days ago",
+      color: "from-blue-400 to-cyan-500",
+      link: "https://symptoscan-2mg1.onrender.com/"
     },
     {
       icon: Heart,
-      title: "Symptom Check",
-      description: "AI-powered analysis",
-      action: "Start Scan",
-      color: "from-blue-400 to-cyan-400"
+      title: "GynConnect",
+      description: "Expert consultations",
+      progress: 60,
+      lastUsed: "1 week ago",
+      color: "from-emerald-400 to-green-500",
+      link: "https://gyno-connect-oasis.vercel.app/"
     },
     {
-      icon: FileText,
-      title: "Health Records",
-      description: "View your history",
-      action: "Open Vault",
-      color: "from-green-400 to-emerald-400"
+      icon: Database,
+      title: "MediVault",
+      description: "Your health records",
+      progress: 90,
+      lastUsed: "1 day ago",
+      color: "from-purple-400 to-violet-500",
+      link: "https://medi-safe-journal-vault.vercel.app/"
     },
     {
-      icon: Users,
-      title: "Community",
-      description: "Connect with others",
-      action: "Join Chat",
-      color: "from-purple-400 to-violet-400"
+      icon: Shield,
+      title: "HealthYojana",
+      description: "Government schemes",
+      progress: 45,
+      lastUsed: "2 weeks ago",
+      color: "from-amber-400 to-orange-500",
+      link: "http://health-yojana.vercel.app/"
+    },
+    {
+      icon: Building2,
+      title: "NGOHeal",
+      description: "NGO support network",
+      progress: 30,
+      lastUsed: "3 weeks ago",
+      color: "from-teal-400 to-cyan-500",
+      link: "https://ngo-heal.vercel.app/"
+    },
+    {
+      icon: MessageCircle,
+      title: "CareCircle",
+      description: "Peer support groups",
+      progress: 75,
+      lastUsed: "3 days ago",
+      color: "from-indigo-400 to-purple-500",
+      link: "https://carecircle-women-unite.vercel.app/"
+    },
+    {
+      icon: Syringe,
+      title: "VaxAlert",
+      description: "Vaccination reminders",
+      progress: 55,
+      lastUsed: "1 week ago",
+      color: "from-pink-400 to-rose-500",
+      link: "https://vaxalert2.vercel.app/"
     }
   ];
 
   const recentActivity = [
     { 
       type: "period",
-      message: "Period tracking updated",
+      message: "Period tracking updated - Next cycle in 5 days",
       time: "2 hours ago",
       icon: Calendar
     },
     {
       type: "consultation", 
-      message: "Dr. Sharma consultation completed",
+      message: "Dr. Sharma consultation completed successfully",
       time: "1 day ago",
       icon: Heart
     },
@@ -56,6 +104,18 @@ const Dashboard = ({ userName }: DashboardProps) => {
       message: "New message in PCOS Support Group",
       time: "2 days ago", 
       icon: Users
+    },
+    {
+      type: "health",
+      message: "Health records updated in MediVault",
+      time: "3 days ago",
+      icon: Database
+    },
+    {
+      type: "vaccination",
+      message: "Vaccination reminder for HPV booster",
+      time: "1 week ago",
+      icon: Syringe
     }
   ];
 
@@ -73,12 +133,21 @@ const Dashboard = ({ userName }: DashboardProps) => {
       positive: true
     },
     {
-      title: "Consultation Credits",
-      value: "3 remaining",
-      trend: "Expires in 30 days",
-      positive: false
+      title: "Years with Saarthi",
+      value: "1.2 years",
+      trend: "Since March 2023",
+      positive: true
     }
   ];
+
+  const handleFeatureClick = (link: string) => {
+    window.open(link, '_blank', 'noopener,noreferrer');
+  };
+
+  const handleHelpClick = () => {
+    // This would navigate to help page in a real app
+    window.open('/help', '_blank');
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -91,12 +160,31 @@ const Dashboard = ({ userName }: DashboardProps) => {
                 Welcome back, {userName}! 👋
               </h1>
               <p className="text-white/80">
-                Here's what's happening with your health today
+                Here's your personalized health dashboard for today
               </p>
             </div>
             <div className="flex gap-2">
               <Button variant="secondary" size="icon">
                 <Bell className="w-5 h-5" />
+              </Button>
+              <Button 
+                variant="secondary" 
+                size="icon"
+                onClick={() => setShowProfilePopup(!showProfilePopup)}
+                className="relative"
+              >
+                <User className="w-5 h-5" />
+                {showProfilePopup && (
+                  <div className="absolute top-12 right-0 bg-card border border-border rounded-lg shadow-elegant p-4 z-50 w-64">
+                    <h3 className="font-semibold text-foreground mb-2">Profile Summary</h3>
+                    <div className="space-y-2 text-sm">
+                      <p className="text-muted-foreground">Member since: <span className="text-foreground">March 2023</span></p>
+                      <p className="text-muted-foreground">Time with Saarthi: <span className="text-foreground">1.2 years</span></p>
+                      <p className="text-muted-foreground">Health Score: <span className="text-green-600 font-medium">85/100</span></p>
+                      <p className="text-muted-foreground">Features Used: <span className="text-foreground">6/8</span></p>
+                    </div>
+                  </div>
+                )}
               </Button>
               <Button variant="secondary" size="icon">
                 <Settings className="w-5 h-5" />
@@ -127,26 +215,44 @@ const Dashboard = ({ userName }: DashboardProps) => {
           </div>
         </section>
 
-        {/* Quick Actions */}
+        {/* Personalized Feature Progress */}
         <section className="mb-8">
-          <h2 className="text-xl font-semibold mb-4">Quick Actions</h2>
+          <h2 className="text-xl font-semibold mb-4">Your Feature Progress</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {quickActions.map((action, index) => (
-              <Card key={index} className="card-feature p-6 text-center">
-                <div className={`w-12 h-12 rounded-full bg-gradient-to-r ${action.color} flex items-center justify-center mx-auto mb-4`}>
-                  <action.icon className="w-6 h-6 text-white" />
+            {personalizedFeatures.map((feature, index) => (
+              <Card key={index} className="card-feature p-4 cursor-pointer hover:scale-105 transition-transform duration-300" onClick={() => handleFeatureClick(feature.link)}>
+                <div className={`w-12 h-12 rounded-full bg-gradient-to-r ${feature.color} flex items-center justify-center mx-auto mb-4`}>
+                  <feature.icon className="w-6 h-6 text-white" />
                 </div>
-                <h3 className="font-semibold text-foreground mb-2">{action.title}</h3>
-                <p className="text-sm text-muted-foreground mb-4">{action.description}</p>
-                <Button className="btn-feature w-full">
-                  {action.action}
+                <h3 className="font-semibold text-foreground mb-2 text-center">{feature.title}</h3>
+                <p className="text-sm text-muted-foreground mb-3 text-center">{feature.description}</p>
+                
+                {/* Progress bar */}
+                <div className="mb-2">
+                  <div className="flex justify-between text-xs text-muted-foreground mb-1">
+                    <span>Progress</span>
+                    <span>{feature.progress}%</span>
+                  </div>
+                  <div className="w-full bg-muted rounded-full h-2">
+                    <div 
+                      className={`h-2 rounded-full bg-gradient-to-r ${feature.color}`}
+                      style={{ width: `${feature.progress}%` }}
+                    ></div>
+                  </div>
+                </div>
+                
+                <p className="text-xs text-muted-foreground text-center">Last used: {feature.lastUsed}</p>
+                
+                <Button className="btn-feature w-full mt-3 flex items-center gap-2">
+                  Open Feature
+                  <ExternalLink className="w-3 h-3" />
                 </Button>
               </Card>
             ))}
           </div>
         </section>
 
-        {/* Recent Activity & Features */}
+        {/* Recent Activity & Help Section */}
         <div className="grid lg:grid-cols-2 gap-8">
           {/* Recent Activity */}
           <section>
@@ -171,13 +277,17 @@ const Dashboard = ({ userName }: DashboardProps) => {
             </Card>
           </section>
 
-          {/* Health Services */}
+          {/* Help & Support */}
           <section>
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl font-semibold">Recommended Services</h2>
-              <Button variant="ghost" size="sm">
+              <h2 className="text-xl font-semibold">Need Help?</h2>
+              <Button 
+                variant="ghost" 
+                size="sm"
+                onClick={handleHelpClick}
+              >
                 <HelpCircle className="w-4 h-4 mr-1" />
-                Help
+                Get Support
               </Button>
             </div>
             <Card className="card-elegant p-4">
@@ -185,26 +295,26 @@ const Dashboard = ({ userName }: DashboardProps) => {
                 <div className="border border-border/50 rounded-lg p-4">
                   <div className="flex items-center gap-3 mb-2">
                     <TrendingUp className="w-5 h-5 text-green-600" />
-                    <h3 className="font-medium">Health Trend Analysis</h3>
+                    <h3 className="font-medium">Quick Help</h3>
                   </div>
                   <p className="text-sm text-muted-foreground mb-3">
-                    Get personalized insights based on your health data
+                    Need assistance with any feature? Our support team is here 24/7
                   </p>
-                  <Button size="sm" className="btn-feature">
-                    View Analysis
+                  <Button size="sm" className="btn-feature" onClick={handleHelpClick}>
+                    Contact Support
                   </Button>
                 </div>
                 
                 <div className="border border-border/50 rounded-lg p-4">
                   <div className="flex items-center gap-3 mb-2">
                     <Users className="w-5 h-5 text-purple-600" />
-                    <h3 className="font-medium">Expert Consultation</h3>
+                    <h3 className="font-medium">Community Support</h3>
                   </div>
                   <p className="text-sm text-muted-foreground mb-3">
-                    Book a session with our certified gynecologists
+                    Connect with other women in our supportive community
                   </p>
-                  <Button size="sm" className="btn-feature">
-                    Book Now
+                  <Button size="sm" className="btn-feature" onClick={() => handleFeatureClick("https://carecircle-women-unite.vercel.app/")}>
+                    Join Community
                   </Button>
                 </div>
               </div>

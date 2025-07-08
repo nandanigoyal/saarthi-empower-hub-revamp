@@ -1,6 +1,6 @@
 
 import { useState } from 'react';
-import { X, Eye, EyeOff, User, Mail, Lock, Phone, MapPin, Calendar } from 'lucide-react';
+import { X, Eye, EyeOff, User, Mail, Lock, Phone, MapPin, Calendar, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import saarthiLogo from '@/assets/saarthi-logo.png';
@@ -106,20 +106,32 @@ const AuthModal = ({ isOpen, onClose, onLogin }: AuthModalProps) => {
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content max-w-md" onClick={e => e.stopPropagation()}>
         <Card className="card-elegant p-8 relative">
-          <button
-            onClick={onClose}
-            className="absolute top-4 right-4 text-muted-foreground hover:text-foreground transition-colors"
-          >
-            <X className="w-5 h-5" />
-          </button>
+          {/* Back button and close button */}
+          <div className="flex items-center justify-between mb-6">
+            <button
+              onClick={onClose}
+              className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              <span className="text-sm">Back to Home</span>
+            </button>
+            <button
+              onClick={onClose}
+              className="text-muted-foreground hover:text-foreground transition-colors"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
 
           {/* Logo and Welcome */}
           <div className="text-center mb-8">
-            <img 
-              src={saarthiLogo} 
-              alt="Saarthi Digital Hub" 
-              className="h-16 w-auto mx-auto mb-4"
-            />
+            <div className="w-20 h-20 mx-auto mb-4 p-3 bg-gradient-primary rounded-2xl">
+              <img 
+                src={saarthiLogo} 
+                alt="Saarthi Digital Hub" 
+                className="w-full h-full object-contain filter brightness-0 invert"
+              />
+            </div>
             <h2 className="text-2xl font-bold text-foreground mb-2">
               {isLogin ? 'Welcome Back!' : 'Get Started with Saarthi'}
             </h2>

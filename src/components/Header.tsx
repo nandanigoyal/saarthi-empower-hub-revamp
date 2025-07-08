@@ -1,5 +1,6 @@
+
 import { useState } from 'react';
-import { Menu, X, ChevronDown, User, Settings, LogOut } from 'lucide-react';
+import { Menu, X, ChevronDown, User, Settings, LogOut, ArrowLeft, Home } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import saarthiLogo from '@/assets/saarthi-logo.png';
 import ExploreModal from './ExploreModal';
@@ -28,50 +29,62 @@ const Header = ({ isLoggedIn, userDashboard = false, onLogin, onLogout }: Header
     }
   };
 
+  const handleHomeClick = () => {
+    if (userDashboard) {
+      window.location.reload(); // This will take to landing page
+    }
+  };
+
   return (
     <>
       <header className="bg-background/95 backdrop-blur-sm border-b border-border/50 sticky top-0 z-40">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
-            {/* Logo */}
-            <div className="flex-shrink-0 cursor-pointer">
-              <img 
-                src={saarthiLogo} 
-                alt="Saarthi Digital Hub" 
-                className="h-10 w-auto object-contain"
-              />
-            </div>
-
-            {/* Desktop Navigation */}
-            <nav className="hidden md:flex items-center space-x-8">
-              <button className="nav-link font-medium">
-                Home
-              </button>
-              
-              <div className="relative">
-                <button 
-                  onClick={() => setIsExploreOpen(true)}
-                  className="nav-link font-medium flex items-center gap-1"
-                >
-                  Explore <ChevronDown className="w-4 h-4" />
-                </button>
+            {/* Logo - Left aligned */}
+            <div className="flex items-center gap-8">
+              <div className="flex-shrink-0 cursor-pointer">
+                <img 
+                  src={saarthiLogo} 
+                  alt="Saarthi Digital Hub" 
+                  className="h-10 w-auto object-contain"
+                />
               </div>
 
-              <button 
-                onClick={() => setIsAboutOpen(true)}
-                className="nav-link font-medium"
-              >
-                About
-              </button>
-
-              {userDashboard && (
-                <button className="nav-link font-medium">
-                  Dashboard
+              {/* Desktop Navigation - Left aligned */}
+              <nav className="hidden md:flex items-center space-x-8">
+                <button 
+                  onClick={handleHomeClick}
+                  className="nav-link font-medium flex items-center gap-1"
+                >
+                  <Home className="w-4 h-4" />
+                  Home
                 </button>
-              )}
-            </nav>
+                
+                <div className="relative">
+                  <button 
+                    onClick={() => setIsExploreOpen(true)}
+                    className="nav-link font-medium flex items-center gap-1"
+                  >
+                    Explore <ChevronDown className="w-4 h-4" />
+                  </button>
+                </div>
 
-            {/* Auth Section */}
+                <button 
+                  onClick={() => setIsAboutOpen(true)}
+                  className="nav-link font-medium"
+                >
+                  About
+                </button>
+
+                {userDashboard && (
+                  <button className="nav-link font-medium">
+                    Dashboard
+                  </button>
+                )}
+              </nav>
+            </div>
+
+            {/* Auth Section - Right aligned */}
             <div className="hidden md:flex items-center space-x-4">
               {!isLoggedIn ? (
                 <>
@@ -141,7 +154,13 @@ const Header = ({ isLoggedIn, userDashboard = false, onLogin, onLogout }: Header
           {isMobileMenuOpen && (
             <div className="md:hidden py-4 border-t border-border/50">
               <div className="flex flex-col space-y-4">
-                <button className="text-left nav-link font-medium">Home</button>
+                <button 
+                  onClick={handleHomeClick}
+                  className="text-left nav-link font-medium flex items-center gap-2"
+                >
+                  <Home className="w-4 h-4" />
+                  Home
+                </button>
                 <button 
                   onClick={() => setIsExploreOpen(true)}
                   className="text-left nav-link font-medium"

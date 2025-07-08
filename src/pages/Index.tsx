@@ -20,13 +20,6 @@ const Index = () => {
     setIsLoggedIn(false);
   };
 
-  const scrollToAbout = () => {
-    const aboutSection = document.getElementById('about-section');
-    if (aboutSection) {
-      aboutSection.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
   // If logged in, show dashboard
   if (isLoggedIn) {
     return (
@@ -42,78 +35,78 @@ const Index = () => {
     );
   }
 
-  // Feature cards with actual links
+  // Feature cards with creative artistic icons and actual links
   const features = [
     {
       icon: Calendar,
       title: "SheCycle+",
       description: "Period & mood tracker with flow logs",
-      fullDescription: "Complete period & mood tracker with flow logs and smart reminders to help you understand your cycle better",
+      fullDescription: "Complete period tracking with mood analysis, flow logs, and smart reminders to help you understand your cycle patterns better",
       users: "25k+ users",
-      color: "from-pink-400 to-red-400",
+      color: "from-rose-400 to-pink-500",
       link: "https://feminine-she-care-vpg6.vercel.app/"
     },
     {
       icon: Activity,
       title: "SymptoScan",
       description: "AI symptom scanner with health insights",
-      fullDescription: "AI-powered symptom scanner offering verified health insights and personalized recommendations",
+      fullDescription: "AI-powered symptom analysis offering verified health insights and personalized recommendations from medical experts",
       users: "18k+ users",
-      color: "from-blue-400 to-cyan-400",
+      color: "from-blue-400 to-cyan-500",
       link: "https://symptoscan-2mg1.onrender.com/"
     },
     {
       icon: Stethoscope,
       title: "GynConnect",
       description: "Video & chat with verified gynecologists",
-      fullDescription: "Video & chat consulting with verified gynecologists for professional medical advice",
+      fullDescription: "Professional video consultations and secure chat with certified gynecologists for expert medical advice",
       users: "12k+ users",
-      color: "from-green-400 to-emerald-400",
+      color: "from-emerald-400 to-green-500",
       link: "https://gyno-connect-oasis.vercel.app/"
     },
     {
       icon: Database,
       title: "MediVault",
       description: "Digital locker for health records",
-      fullDescription: "A secure digital locker for prescriptions, vitals, and health logs with encrypted storage",
+      fullDescription: "Secure digital vault for prescriptions, medical reports, vitals, and health logs with encrypted storage",
       users: "30k+ users",
-      color: "from-purple-400 to-violet-400",
+      color: "from-purple-400 to-violet-500",
       link: "https://medi-safe-journal-vault.vercel.app/"
     },
     {
       icon: Shield,
       title: "HealthYojana",
       description: "Discover govt. health schemes",
-      fullDescription: "Discover women-centric government health schemes and get assistance with applications",
+      fullDescription: "Navigate women-centric government health schemes with application assistance and eligibility guidance",
       users: "8k+ users",
-      color: "from-orange-400 to-amber-400",
+      color: "from-amber-400 to-orange-500",
       link: "http://health-yojana.vercel.app/"
     },
     {
       icon: Building2,
       title: "NGOHeal",
       description: "Connect with NGOs for support",
-      fullDescription: "Connect with NGOs for help, shelter, and resources during difficult times",
+      fullDescription: "Connect with verified NGOs for emergency shelter, legal aid, counseling, and community support resources",
       users: "15k+ users",
-      color: "from-teal-400 to-cyan-400",
+      color: "from-teal-400 to-cyan-500",
       link: "https://ngo-heal.vercel.app/"
     },
     {
       icon: MessageCircle,
       title: "CareCircle",
       description: "Peer support for mental health",
-      fullDescription: "Peer support rooms for emotional & mental health with trained moderators",
+      fullDescription: "Anonymous peer support groups for emotional wellness with trained moderators and mental health resources",
       users: "20k+ users",
-      color: "from-indigo-400 to-purple-400",
+      color: "from-indigo-400 to-purple-500",
       link: "https://carecircle-women-unite.vercel.app/"
     },
     {
-      icon: Syringe,
+      icon: Heart,
       title: "VaxAlert",
       description: "Women's vaccine schedules & updates",
-      fullDescription: "Stay updated on latest women's vaccines and schedules with personalized reminders",
+      fullDescription: "Personalized vaccination schedules, reminders, and updates on latest women-specific vaccines and health recommendations",
       users: "10k+ users",
-      color: "from-rose-400 to-pink-400",
+      color: "from-pink-400 to-rose-500",
       link: "https://vaxalert2.vercel.app/"
     }
   ];
@@ -181,7 +174,12 @@ const Index = () => {
                   Join Saarthi Today
                   <ArrowRight className="ml-2 w-5 h-5" />
                 </Button>
-                <Button onClick={scrollToAbout} variant="outline" className="btn-elegant text-lg px-8 py-4">
+                <Button onClick={() => {
+                  const aboutSection = document.getElementById('about-section');
+                  if (aboutSection) {
+                    aboutSection.scrollIntoView({ behavior: 'smooth' });
+                  }
+                }} variant="outline" className="btn-elegant text-lg px-8 py-4">
                   Learn More
                 </Button>
               </div>
@@ -249,7 +247,45 @@ const Index = () => {
         </div>
       </section>
 
-      {/* About Section */}
+      {/* Testimonials */}
+      <section className="py-20 bg-muted/30">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">
+              Trusted by Healthcare Professionals
+            </h2>
+            <p className="text-lg text-muted-foreground">
+              See what doctors and women are saying about Saarthi
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            {testimonials.map((testimonial, index) => (
+              <Card key={index} className="card-elegant p-6">
+                <div className="flex items-center gap-4 mb-4">
+                  <img 
+                    src={testimonial.image} 
+                    alt={testimonial.name}
+                    className="w-12 h-12 rounded-full object-cover"
+                  />
+                  <div>
+                    <h4 className="font-semibold text-foreground">{testimonial.name}</h4>
+                    <p className="text-sm text-muted-foreground">{testimonial.role}</p>
+                  </div>
+                </div>
+                <p className="text-foreground italic">"{testimonial.quote}"</p>
+                <div className="flex items-center gap-1 mt-4">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                  ))}
+                </div>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* About Section - Moved here from duplicate */}
       <section id="about-section" className="py-20">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
@@ -297,44 +333,6 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Testimonials */}
-      <section className="py-20 bg-muted/30">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">
-              Trusted by Healthcare Professionals
-            </h2>
-            <p className="text-lg text-muted-foreground">
-              See what doctors and women are saying about Saarthi
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            {testimonials.map((testimonial, index) => (
-              <Card key={index} className="card-elegant p-6">
-                <div className="flex items-center gap-4 mb-4">
-                  <img 
-                    src={testimonial.image} 
-                    alt={testimonial.name}
-                    className="w-12 h-12 rounded-full object-cover"
-                  />
-                  <div>
-                    <h4 className="font-semibold text-foreground">{testimonial.name}</h4>
-                    <p className="text-sm text-muted-foreground">{testimonial.role}</p>
-                  </div>
-                </div>
-                <p className="text-foreground italic">"{testimonial.quote}"</p>
-                <div className="flex items-center gap-1 mt-4">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                  ))}
-                </div>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* CTA Section */}
       <section className="py-20 bg-gradient-hero text-white">
         <div className="container mx-auto px-4 text-center">
@@ -350,7 +348,12 @@ const Index = () => {
               Get Started Today
               <ArrowRight className="ml-2 w-5 h-5" />
             </Button>
-            <Button onClick={scrollToAbout} variant="outline" className="btn-elegant text-lg px-8 py-4">
+            <Button onClick={() => {
+              const aboutSection = document.getElementById('about-section');
+              if (aboutSection) {
+                aboutSection.scrollIntoView({ behavior: 'smooth' });
+              }
+            }} variant="outline" className="btn-elegant text-lg px-8 py-4">
               Learn More
             </Button>
           </div>
