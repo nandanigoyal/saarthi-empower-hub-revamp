@@ -2,10 +2,11 @@
 import { useState } from 'react';
 import { Menu, X, ChevronDown, User, Settings, LogOut, ArrowLeft, Home } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import saarthiLogo from '@/assets/saarthi-logo.png';
 import ExploreModal from './ExploreModal';
 import AboutModal from './AboutModal';
 import AuthModal from './AuthModal';
+import HelpPopup from './HelpPopup';
+import SaarthiLogo from './SaarthiLogo';
 
 interface HeaderProps {
   isLoggedIn: boolean;
@@ -19,6 +20,7 @@ const Header = ({ isLoggedIn, userDashboard = false, onLogin, onLogout }: Header
   const [isExploreOpen, setIsExploreOpen] = useState(false);
   const [isAboutOpen, setIsAboutOpen] = useState(false);
   const [isAuthOpen, setIsAuthOpen] = useState(false);
+  const [isHelpOpen, setIsHelpOpen] = useState(false);
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
 
   const handleAuthClick = () => {
@@ -35,6 +37,10 @@ const Header = ({ isLoggedIn, userDashboard = false, onLogin, onLogout }: Header
     }
   };
 
+  const handleHelpClick = () => {
+    setIsHelpOpen(true);
+  };
+
   return (
     <>
       <header className="bg-background/95 backdrop-blur-sm border-b border-border/50 sticky top-0 z-40">
@@ -42,12 +48,9 @@ const Header = ({ isLoggedIn, userDashboard = false, onLogin, onLogout }: Header
           <div className="flex items-center justify-between h-16">
             {/* Logo - Left aligned */}
             <div className="flex items-center gap-8">
-              <div className="flex-shrink-0 cursor-pointer">
-                <img 
-                  src={saarthiLogo} 
-                  alt="Saarthi Digital Hub" 
-                  className="h-10 w-auto object-contain"
-                />
+              <div className="flex items-center gap-3 cursor-pointer">
+                <SaarthiLogo size="md" />
+                <span className="font-bold text-xl text-foreground hidden sm:block">Saarthi</span>
               </div>
 
               {/* Desktop Navigation - Left aligned */}
@@ -201,6 +204,7 @@ const Header = ({ isLoggedIn, userDashboard = false, onLogin, onLogout }: Header
       <ExploreModal isOpen={isExploreOpen} onClose={() => setIsExploreOpen(false)} />
       <AboutModal isOpen={isAboutOpen} onClose={() => setIsAboutOpen(false)} />
       <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} onLogin={onLogin} />
+      <HelpPopup isOpen={isHelpOpen} onClose={() => setIsHelpOpen(false)} />
     </>
   );
 };

@@ -74,7 +74,7 @@ const Index = () => {
       link: "https://medi-safe-journal-vault.vercel.app/"
     },
     {
-      icon: Shield,
+      icon: FileText,
       title: "HealthYojana",
       description: "Discover govt. health schemes",
       fullDescription: "Navigate women-centric government health schemes with application assistance and eligibility guidance",
@@ -101,7 +101,7 @@ const Index = () => {
       link: "https://carecircle-women-unite.vercel.app/"
     },
     {
-      icon: Heart,
+      icon: Shield,
       title: "VaxAlert",
       description: "Women's vaccine schedules & updates",
       fullDescription: "Personalized vaccination schedules, reminders, and updates on latest women-specific vaccines and health recommendations",
@@ -116,27 +116,6 @@ const Index = () => {
     { icon: Star, value: "98%", label: "Satisfaction Rate" },
     { icon: Zap, value: "24/7", label: "Support Available" },
     { icon: Award, value: "25+", label: "Health Services" }
-  ];
-
-  const testimonials = [
-    {
-      name: "Dr. Meera Patel",
-      role: "Gynecologist",
-      image: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=100&h=100&fit=crop&crop=face",
-      quote: "Saarthi is revolutionizing how women access healthcare. The quality of consultations and user engagement is remarkable."
-    },
-    {
-      name: "Priya Sharma",
-      role: "Health Advocate",
-      image: "https://images.unsplash.com/photo-1494790108755-2616b612b47c?w=100&h=100&fit=crop&crop=face",
-      quote: "This platform changed my understanding of my own health. The period tracking and AI insights are incredibly accurate."
-    },
-    {
-      name: "Ritu Agarwal",
-      role: "Working Professional",
-      image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=100&h=100&fit=crop&crop=face",
-      quote: "Finally found government health schemes I didn't know existed. The platform made everything so accessible."
-    }
   ];
 
   return (
@@ -243,92 +222,6 @@ const Index = () => {
             {features.slice(4, 8).map((feature, index) => (
               <FeatureCard key={index + 4} {...feature} />
             ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Testimonials */}
-      <section className="py-20 bg-muted/30">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">
-              Trusted by Healthcare Professionals
-            </h2>
-            <p className="text-lg text-muted-foreground">
-              See what doctors and women are saying about Saarthi
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            {testimonials.map((testimonial, index) => (
-              <Card key={index} className="card-elegant p-6">
-                <div className="flex items-center gap-4 mb-4">
-                  <img 
-                    src={testimonial.image} 
-                    alt={testimonial.name}
-                    className="w-12 h-12 rounded-full object-cover"
-                  />
-                  <div>
-                    <h4 className="font-semibold text-foreground">{testimonial.name}</h4>
-                    <p className="text-sm text-muted-foreground">{testimonial.role}</p>
-                  </div>
-                </div>
-                <p className="text-foreground italic">"{testimonial.quote}"</p>
-                <div className="flex items-center gap-1 mt-4">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                  ))}
-                </div>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* About Section - Moved here from duplicate */}
-      <section id="about-section" className="py-20">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">
-              About Saarthi Digital Hub
-            </h2>
-            <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-              Saarthi Digital Hub is India's leading women's health platform, combining cutting-edge technology 
-              with compassionate care to empower women across the country. Our mission is to make quality 
-              healthcare accessible, affordable, and approachable for every woman.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-12 items-center mb-16">
-            <div>
-              <h3 className="text-2xl font-bold text-foreground mb-4">Our Impact</h3>
-              <p className="text-muted-foreground mb-6">
-                Since our inception, we've conducted numerous health drives, awareness campaigns, and 
-                community outreach programs. Our team of certified healthcare professionals and 
-                technology experts work tirelessly to bridge the gap between women and quality healthcare.
-              </p>
-              <ul className="space-y-3 text-muted-foreground">
-                <li className="flex items-center gap-2">
-                  <Heart className="w-5 h-5 text-primary" />
-                  50,000+ women served across India
-                </li>
-                <li className="flex items-center gap-2">
-                  <Users className="w-5 h-5 text-primary" />
-                  200+ health camps conducted
-                </li>
-                <li className="flex items-center gap-2">
-                  <Award className="w-5 h-5 text-primary" />
-                  98% user satisfaction rate
-                </li>
-              </ul>
-            </div>
-            <div>
-              <img 
-                src={heroWomen} 
-                alt="Saarthi health drives and community impact"
-                className="rounded-xl shadow-elegant w-full"
-              />
-            </div>
           </div>
         </div>
       </section>

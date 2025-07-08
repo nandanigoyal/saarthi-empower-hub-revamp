@@ -1,9 +1,9 @@
 
 import { useState } from 'react';
-import { X, Eye, EyeOff, User, Mail, Lock, Phone, MapPin, Calendar, ArrowLeft } from 'lucide-react';
+import { X, ArrowLeft, Eye, EyeOff } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import saarthiLogo from '@/assets/saarthi-logo.png';
+import SaarthiLogo from './SaarthiLogo';
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -14,22 +14,25 @@ interface AuthModalProps {
 const AuthModal = ({ isOpen, onClose, onLogin }: AuthModalProps) => {
   const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
+    phone: '',
     password: '',
     confirmPassword: '',
-    phone: '',
     age: '',
-    city: ''
+    city: '',
+    termsAccepted: false
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
 
-  if (!isOpen) return null;
-
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    const { name, value, type, checked } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: type === 'checkbox' ? checked : value
+    }));
     
     // Clear error when user starts typing
     if (errors[name]) {
@@ -40,28 +43,31 @@ const AuthModal = ({ isOpen, onClose, onLogin }: AuthModalProps) => {
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
 
-    if (!isLogin) {
-      // Signup validation
-      if (!formData.name.trim()) newErrors.name = 'Name is required';
-      if (!formData.phone.trim()) newErrors.phone = 'Phone number is required';
-      if (!formData.age.trim()) newErrors.age = 'Age is required';
-      if (!formData.city.trim()) newErrors.city = 'City is required';
-      if (formData.password !== formData.confirmPassword) {
-        newErrors.confirmPassword = 'Passwords do not match';
-      }
-    }
-
-    // Common validation
-    if (!formData.email.trim()) {
+    if (!formData.email) {
       newErrors.email = 'Email is required';
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Please enter a valid email';
+      newErrors.email = 'Email is invalid';
     }
 
-    if (!formData.password.trim()) {
+    if (!formData.password) {
       newErrors.password = 'Password is required';
     } else if (formData.password.length < 6) {
       newErrors.password = 'Password must be at least 6 characters';
+    }
+
+    if (!isLogin) {
+      if (!formData.name) newErrors.name = 'Name is required';
+      if (!formData.phone) newErrors.phone = 'Phone number is required';
+      if (!formData.age) newErrors.age = 'Age is required';
+      if (!formData.city) newErrors.city = 'City is required';
+      if (!formData.confirmPassword) {
+        newErrors.confirmPassword = 'Please confirm your password';
+      } else if (formData.password !== formData.confirmPassword) {
+        newErrors.confirmPassword = 'Passwords do not match';
+      }
+      if (!formData.termsAccepted) {
+        newErrors.termsAccepted = 'You must accept the terms and conditions';
+      }
     }
 
     setErrors(newErrors);
@@ -70,67 +76,56 @@ const AuthModal = ({ isOpen, onClose, onLogin }: AuthModalProps) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
     if (validateForm()) {
       onLogin();
       onClose();
-      // Reset form
-      setFormData({
-        name: '',
-        email: '',
-        password: '',
-        confirmPassword: '',
-        phone: '',
-        age: '',
-        city: ''
-      });
-      setErrors({});
     }
   };
 
-  const toggleAuthMode = () => {
-    setIsLogin(!isLogin);
-    setErrors({});
+  const resetForm = () => {
     setFormData({
       name: '',
       email: '',
+      phone: '',
       password: '',
       confirmPassword: '',
-      phone: '',
       age: '',
-      city: ''
+      city: '',
+      termsAccepted: false
     });
+    setErrors({});
   };
 
+  const handleClose = () => {
+    resetForm();
+    onClose();
+  };
+
+  const switchMode = () => {
+    setIsLogin(!isLogin);
+    resetForm();
+  };
+
+  if (!isOpen) return null;
+
   return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-content max-w-md" onClick={e => e.stopPropagation()}>
-        <Card className="card-elegant p-8 relative">
-          {/* Back button and close button */}
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+      <Card className="card-elegant w-full max-w-md max-h-[90vh] overflow-y-auto">
+        <div className="p-6">
+          {/* Header */}
           <div className="flex items-center justify-between mb-6">
-            <button
-              onClick={onClose}
-              className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
-            >
-              <ArrowLeft className="w-4 h-4" />
-              <span className="text-sm">Back to Home</span>
-            </button>
-            <button
-              onClick={onClose}
-              className="text-muted-foreground hover:text-foreground transition-colors"
-            >
+            <Button variant="ghost" size="icon" onClick={handleClose}>
+              <ArrowLeft className="w-5 h-5" />
+            </Button>
+            <Button variant="ghost" size="icon" onClick={handleClose}>
               <X className="w-5 h-5" />
-            </button>
+            </Button>
           </div>
 
-          {/* Logo and Welcome */}
-          <div className="text-center mb-8">
-            <div className="w-20 h-20 mx-auto mb-4 p-3 bg-gradient-primary rounded-2xl">
-              <img 
-                src={saarthiLogo} 
-                alt="Saarthi Digital Hub" 
-                className="w-full h-full object-contain filter brightness-0 invert"
-              />
+          {/* Logo and Title */}
+          <div className="text-center mb-6">
+            <div className="flex justify-center mb-4">
+              <SaarthiLogo size="lg" />
             </div>
             <h2 className="text-2xl font-bold text-foreground mb-2">
               {isLogin ? 'Welcome Back!' : 'Get Started with Saarthi'}
@@ -143,12 +138,12 @@ const AuthModal = ({ isOpen, onClose, onLogin }: AuthModalProps) => {
             </p>
           </div>
 
+          {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-4">
             {!isLogin && (
               <>
                 <div>
                   <label className="block text-sm font-medium text-foreground mb-2">
-                    <User className="w-4 h-4 inline mr-2" />
                     Full Name *
                   </label>
                   <input
@@ -156,32 +151,34 @@ const AuthModal = ({ isOpen, onClose, onLogin }: AuthModalProps) => {
                     name="name"
                     value={formData.name}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent ${
+                      errors.name ? 'border-red-500' : 'border-border'
+                    }`}
                     placeholder="Enter your full name"
                   />
-                  {errors.name && <p className="text-destructive text-sm mt-1">{errors.name}</p>}
+                  {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-foreground mb-2">
+                    Phone Number *
+                  </label>
+                  <input
+                    type="tel"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleInputChange}
+                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent ${
+                      errors.phone ? 'border-red-500' : 'border-border'
+                    }`}
+                    placeholder="Enter your phone number"
+                  />
+                  {errors.phone && <p className="text-red-500 text-sm mt-1">{errors.phone}</p>}
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-foreground mb-2">
-                      <Phone className="w-4 h-4 inline mr-2" />
-                      Phone *
-                    </label>
-                    <input
-                      type="tel"
-                      name="phone"
-                      value={formData.phone}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                      placeholder="Phone number"
-                    />
-                    {errors.phone && <p className="text-destructive text-sm mt-1">{errors.phone}</p>}
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-foreground mb-2">
-                      <Calendar className="w-4 h-4 inline mr-2" />
                       Age *
                     </label>
                     <input
@@ -189,34 +186,36 @@ const AuthModal = ({ isOpen, onClose, onLogin }: AuthModalProps) => {
                       name="age"
                       value={formData.age}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                      placeholder="Age"
+                      className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent ${
+                        errors.age ? 'border-red-500' : 'border-border'
+                      }`}
+                      placeholder="Your age"
                     />
-                    {errors.age && <p className="text-destructive text-sm mt-1">{errors.age}</p>}
+                    {errors.age && <p className="text-red-500 text-sm mt-1">{errors.age}</p>}
                   </div>
-                </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-foreground mb-2">
-                    <MapPin className="w-4 h-4 inline mr-2" />
-                    City *
-                  </label>
-                  <input
-                    type="text"
-                    name="city"
-                    value={formData.city}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                    placeholder="Your city"
-                  />
-                  {errors.city && <p className="text-destructive text-sm mt-1">{errors.city}</p>}
+                  <div>
+                    <label className="block text-sm font-medium text-foreground mb-2">
+                      City *
+                    </label>
+                    <input
+                      type="text"
+                      name="city"
+                      value={formData.city}
+                      onChange={handleInputChange}
+                      className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent ${
+                        errors.city ? 'border-red-500' : 'border-border'
+                      }`}
+                      placeholder="Your city"
+                    />
+                    {errors.city && <p className="text-red-500 text-sm mt-1">{errors.city}</p>}
+                  </div>
                 </div>
               </>
             )}
 
             <div>
               <label className="block text-sm font-medium text-foreground mb-2">
-                <Mail className="w-4 h-4 inline mr-2" />
                 Email Address *
               </label>
               <input
@@ -224,15 +223,16 @@ const AuthModal = ({ isOpen, onClose, onLogin }: AuthModalProps) => {
                 name="email"
                 value={formData.email}
                 onChange={handleInputChange}
-                className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent ${
+                  errors.email ? 'border-red-500' : 'border-border'
+                }`}
                 placeholder="Enter your email"
               />
-              {errors.email && <p className="text-destructive text-sm mt-1">{errors.email}</p>}
+              {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
             </div>
 
             <div>
               <label className="block text-sm font-medium text-foreground mb-2">
-                <Lock className="w-4 h-4 inline mr-2" />
                 Password *
               </label>
               <div className="relative">
@@ -241,8 +241,10 @@ const AuthModal = ({ isOpen, onClose, onLogin }: AuthModalProps) => {
                   name="password"
                   value={formData.password}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 pr-12 border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                  placeholder="Create a password"
+                  className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent pr-12 ${
+                    errors.password ? 'border-red-500' : 'border-border'
+                  }`}
+                  placeholder="Enter your password"
                 />
                 <button
                   type="button"
@@ -252,45 +254,83 @@ const AuthModal = ({ isOpen, onClose, onLogin }: AuthModalProps) => {
                   {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>
               </div>
-              {errors.password && <p className="text-destructive text-sm mt-1">{errors.password}</p>}
+              {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password}</p>}
             </div>
 
             {!isLogin && (
               <div>
                 <label className="block text-sm font-medium text-foreground mb-2">
-                  <Lock className="w-4 h-4 inline mr-2" />
                   Confirm Password *
                 </label>
-                <input
-                  type="password"
-                  name="confirmPassword"
-                  value={formData.confirmPassword}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                  placeholder="Confirm your password"
-                />
-                {errors.confirmPassword && <p className="text-destructive text-sm mt-1">{errors.confirmPassword}</p>}
+                <div className="relative">
+                  <input
+                    type={showConfirmPassword ? 'text' : 'password'}
+                    name="confirmPassword"
+                    value={formData.confirmPassword}
+                    onChange={handleInputChange}
+                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent pr-12 ${
+                      errors.confirmPassword ? 'border-red-500' : 'border-border'
+                    }`}
+                    placeholder="Confirm your password"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                  >
+                    {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                  </button>
+                </div>
+                {errors.confirmPassword && <p className="text-red-500 text-sm mt-1">{errors.confirmPassword}</p>}
               </div>
             )}
 
-            <Button type="submit" className="btn-hero w-full text-lg py-3 mt-6">
+            {!isLogin && (
+              <div className="flex items-start gap-3">
+                <input
+                  type="checkbox"
+                  name="termsAccepted"
+                  checked={formData.termsAccepted}
+                  onChange={handleInputChange}
+                  className="mt-1"
+                />
+                <div className="text-sm">
+                  <label className="text-foreground">
+                    I agree to the{' '}
+                    <a href="#" className="text-primary hover:underline">
+                      Terms of Service
+                    </a>{' '}
+                    and{' '}
+                    <a href="#" className="text-primary hover:underline">
+                      Privacy Policy
+                    </a>
+                  </label>
+                  {errors.termsAccepted && (
+                    <p className="text-red-500 text-sm mt-1">{errors.termsAccepted}</p>
+                  )}
+                </div>
+              </div>
+            )}
+
+            <Button type="submit" className="btn-hero w-full py-3 text-lg">
               {isLogin ? 'Sign In' : 'Create Account'}
             </Button>
           </form>
 
-          <div className="text-center mt-6 pt-6 border-t border-border">
+          {/* Switch Mode */}
+          <div className="text-center mt-6">
             <p className="text-muted-foreground">
-              {isLogin ? "Don't have an account?" : "Already have an account?"}
+              {isLogin ? "Don't have an account?" : 'Already have an account?'}
               <button
-                onClick={toggleAuthMode}
-                className="ml-2 text-primary hover:text-primary/80 font-medium"
+                onClick={switchMode}
+                className="text-primary hover:underline ml-1 font-medium"
               >
-                {isLogin ? 'Create Account' : 'Sign In'}
+                {isLogin ? 'Sign Up' : 'Sign In'}
               </button>
             </p>
           </div>
-        </Card>
-      </div>
+        </div>
+      </Card>
     </div>
   );
 };

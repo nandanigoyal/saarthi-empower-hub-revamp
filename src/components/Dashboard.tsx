@@ -3,6 +3,7 @@ import { Calendar, Heart, FileText, Users, TrendingUp, Bell, Settings, HelpCircl
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { useState } from 'react';
+import HelpPopup from './HelpPopup';
 
 interface DashboardProps {
   userName: string;
@@ -10,6 +11,7 @@ interface DashboardProps {
 
 const Dashboard = ({ userName }: DashboardProps) => {
   const [showProfilePopup, setShowProfilePopup] = useState(false);
+  const [isHelpOpen, setIsHelpOpen] = useState(false);
 
   const personalizedFeatures = [
     {
@@ -49,7 +51,7 @@ const Dashboard = ({ userName }: DashboardProps) => {
       link: "https://medi-safe-journal-vault.vercel.app/"
     },
     {
-      icon: Shield,
+      icon: FileText,
       title: "HealthYojana",
       description: "Government schemes",
       progress: 45,
@@ -76,7 +78,7 @@ const Dashboard = ({ userName }: DashboardProps) => {
       link: "https://carecircle-women-unite.vercel.app/"
     },
     {
-      icon: Syringe,
+      icon: Shield,
       title: "VaxAlert",
       description: "Vaccination reminders",
       progress: 55,
@@ -112,10 +114,11 @@ const Dashboard = ({ userName }: DashboardProps) => {
       icon: Database
     },
     {
-      type: "vaccination",
-      message: "Vaccination reminder for HPV booster",
+      type: "help",
+      message: "Support request submitted - Account Issues",
       time: "1 week ago",
-      icon: Syringe
+      icon: HelpCircle,
+      status: "Under Review"
     }
   ];
 
@@ -145,184 +148,194 @@ const Dashboard = ({ userName }: DashboardProps) => {
   };
 
   const handleHelpClick = () => {
-    // This would navigate to help page in a real app
-    window.open('/help', '_blank');
+    setIsHelpOpen(true);
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Welcome Section */}
-      <div className="bg-gradient-hero text-white">
-        <div className="container mx-auto px-4 py-8">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-3xl font-bold mb-2">
-                Welcome back, {userName}! 👋
-              </h1>
-              <p className="text-white/80">
-                Here's your personalized health dashboard for today
-              </p>
-            </div>
-            <div className="flex gap-2">
-              <Button variant="secondary" size="icon">
-                <Bell className="w-5 h-5" />
-              </Button>
-              <Button 
-                variant="secondary" 
-                size="icon"
-                onClick={() => setShowProfilePopup(!showProfilePopup)}
-                className="relative"
-              >
-                <User className="w-5 h-5" />
-                {showProfilePopup && (
-                  <div className="absolute top-12 right-0 bg-card border border-border rounded-lg shadow-elegant p-4 z-50 w-64">
-                    <h3 className="font-semibold text-foreground mb-2">Profile Summary</h3>
-                    <div className="space-y-2 text-sm">
-                      <p className="text-muted-foreground">Member since: <span className="text-foreground">March 2023</span></p>
-                      <p className="text-muted-foreground">Time with Saarthi: <span className="text-foreground">1.2 years</span></p>
-                      <p className="text-muted-foreground">Health Score: <span className="text-green-600 font-medium">85/100</span></p>
-                      <p className="text-muted-foreground">Features Used: <span className="text-foreground">6/8</span></p>
-                    </div>
-                  </div>
-                )}
-              </Button>
-              <Button variant="secondary" size="icon">
-                <Settings className="w-5 h-5" />
-              </Button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="container mx-auto px-4 py-8">
-        {/* Health Insights */}
-        <section className="mb-8">
-          <h2 className="text-xl font-semibold mb-4">Health Overview</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {healthInsights.map((insight, index) => (
-              <Card key={index} className="card-elegant p-4">
-                <h3 className="font-medium text-muted-foreground text-sm mb-1">
-                  {insight.title}
-                </h3>
-                <div className="text-2xl font-bold text-foreground mb-1">
-                  {insight.value}
-                </div>
-                <div className={`text-sm ${insight.positive ? 'text-green-600' : 'text-orange-600'}`}>
-                  {insight.trend}
-                </div>
-              </Card>
-            ))}
-          </div>
-        </section>
-
-        {/* Personalized Feature Progress */}
-        <section className="mb-8">
-          <h2 className="text-xl font-semibold mb-4">Your Feature Progress</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {personalizedFeatures.map((feature, index) => (
-              <Card key={index} className="card-feature p-4 cursor-pointer hover:scale-105 transition-transform duration-300" onClick={() => handleFeatureClick(feature.link)}>
-                <div className={`w-12 h-12 rounded-full bg-gradient-to-r ${feature.color} flex items-center justify-center mx-auto mb-4`}>
-                  <feature.icon className="w-6 h-6 text-white" />
-                </div>
-                <h3 className="font-semibold text-foreground mb-2 text-center">{feature.title}</h3>
-                <p className="text-sm text-muted-foreground mb-3 text-center">{feature.description}</p>
-                
-                {/* Progress bar */}
-                <div className="mb-2">
-                  <div className="flex justify-between text-xs text-muted-foreground mb-1">
-                    <span>Progress</span>
-                    <span>{feature.progress}%</span>
-                  </div>
-                  <div className="w-full bg-muted rounded-full h-2">
-                    <div 
-                      className={`h-2 rounded-full bg-gradient-to-r ${feature.color}`}
-                      style={{ width: `${feature.progress}%` }}
-                    ></div>
-                  </div>
-                </div>
-                
-                <p className="text-xs text-muted-foreground text-center">Last used: {feature.lastUsed}</p>
-                
-                <Button className="btn-feature w-full mt-3 flex items-center gap-2">
-                  Open Feature
-                  <ExternalLink className="w-3 h-3" />
+    <>
+      <div className="min-h-screen bg-background">
+        {/* Welcome Section */}
+        <div className="bg-gradient-hero text-white">
+          <div className="container mx-auto px-4 py-8">
+            <div className="flex items-center justify-between">
+              <div>
+                <h1 className="text-3xl font-bold mb-2">
+                  Welcome back, {userName}! 👋
+                </h1>
+                <p className="text-white/80">
+                  Here's your personalized health dashboard for today
+                </p>
+              </div>
+              <div className="flex gap-2">
+                <Button variant="secondary" size="icon">
+                  <Bell className="w-5 h-5" />
                 </Button>
-              </Card>
-            ))}
+                <Button 
+                  variant="secondary" 
+                  size="icon"
+                  onClick={() => setShowProfilePopup(!showProfilePopup)}
+                  className="relative"
+                >
+                  <User className="w-5 h-5" />
+                  {showProfilePopup && (
+                    <div className="absolute top-12 right-0 bg-card border border-border rounded-lg shadow-elegant p-4 z-50 w-64">
+                      <h3 className="font-semibold text-foreground mb-2">Profile Summary</h3>
+                      <div className="space-y-2 text-sm">
+                        <p className="text-muted-foreground">Member since: <span className="text-foreground">March 2023</span></p>
+                        <p className="text-muted-foreground">Time with Saarthi: <span className="text-foreground">1.2 years</span></p>
+                        <p className="text-muted-foreground">Health Score: <span className="text-green-600 font-medium">85/100</span></p>
+                        <p className="text-muted-foreground">Features Used: <span className="text-foreground">6/8</span></p>
+                      </div>
+                    </div>
+                  )}
+                </Button>
+                <Button variant="secondary" size="icon">
+                  <Settings className="w-5 h-5" />
+                </Button>
+              </div>
+            </div>
           </div>
-        </section>
+        </div>
 
-        {/* Recent Activity & Help Section */}
-        <div className="grid lg:grid-cols-2 gap-8">
-          {/* Recent Activity */}
-          <section>
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl font-semibold">Recent Activity</h2>
-              <Button variant="ghost" size="sm">View All</Button>
-            </div>
-            <Card className="card-elegant p-4">
-              <div className="space-y-4">
-                {recentActivity.map((activity, index) => (
-                  <div key={index} className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-full bg-accent/20 flex items-center justify-center">
-                      <activity.icon className="w-4 h-4 text-accent-foreground" />
-                    </div>
-                    <div className="flex-1">
-                      <p className="text-sm text-foreground">{activity.message}</p>
-                      <p className="text-xs text-muted-foreground">{activity.time}</p>
-                    </div>
+        <div className="container mx-auto px-4 py-8">
+          {/* Health Insights */}
+          <section className="mb-8">
+            <h2 className="text-xl font-semibold mb-4">Health Overview</h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {healthInsights.map((insight, index) => (
+                <Card key={index} className="card-elegant p-4">
+                  <h3 className="font-medium text-muted-foreground text-sm mb-1">
+                    {insight.title}
+                  </h3>
+                  <div className="text-2xl font-bold text-foreground mb-1">
+                    {insight.value}
                   </div>
-                ))}
-              </div>
-            </Card>
+                  <div className={`text-sm ${insight.positive ? 'text-green-600' : 'text-orange-600'}`}>
+                    {insight.trend}
+                  </div>
+                </Card>
+              ))}
+            </div>
           </section>
 
-          {/* Help & Support */}
-          <section>
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl font-semibold">Need Help?</h2>
-              <Button 
-                variant="ghost" 
-                size="sm"
-                onClick={handleHelpClick}
-              >
-                <HelpCircle className="w-4 h-4 mr-1" />
-                Get Support
-              </Button>
+          {/* Personalized Feature Progress */}
+          <section className="mb-8">
+            <h2 className="text-xl font-semibold mb-4">Your Feature Progress</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              {personalizedFeatures.map((feature, index) => (
+                <Card key={index} className="card-feature p-4 cursor-pointer hover:scale-105 transition-transform duration-300" onClick={() => handleFeatureClick(feature.link)}>
+                  <div className={`w-12 h-12 rounded-full bg-gradient-to-r ${feature.color} flex items-center justify-center mx-auto mb-4`}>
+                    <feature.icon className="w-6 h-6 text-white" />
+                  </div>
+                  <h3 className="font-semibold text-foreground mb-2 text-center">{feature.title}</h3>
+                  <p className="text-sm text-muted-foreground mb-3 text-center">{feature.description}</p>
+                  
+                  {/* Progress bar */}
+                  <div className="mb-2">
+                    <div className="flex justify-between text-xs text-muted-foreground mb-1">
+                      <span>Progress</span>
+                      <span>{feature.progress}%</span>
+                    </div>
+                    <div className="w-full bg-muted rounded-full h-2">
+                      <div 
+                        className={`h-2 rounded-full bg-gradient-to-r ${feature.color}`}
+                        style={{ width: `${feature.progress}%` }}
+                      ></div>
+                    </div>
+                  </div>
+                  
+                  <p className="text-xs text-muted-foreground text-center">Last used: {feature.lastUsed}</p>
+                  
+                  <Button className="btn-feature w-full mt-3 flex items-center gap-2">
+                    Open Feature
+                    <ExternalLink className="w-3 h-3" />
+                  </Button>
+                </Card>
+              ))}
             </div>
-            <Card className="card-elegant p-4">
-              <div className="space-y-4">
-                <div className="border border-border/50 rounded-lg p-4">
-                  <div className="flex items-center gap-3 mb-2">
-                    <TrendingUp className="w-5 h-5 text-green-600" />
-                    <h3 className="font-medium">Quick Help</h3>
-                  </div>
-                  <p className="text-sm text-muted-foreground mb-3">
-                    Need assistance with any feature? Our support team is here 24/7
-                  </p>
-                  <Button size="sm" className="btn-feature" onClick={handleHelpClick}>
-                    Contact Support
-                  </Button>
-                </div>
-                
-                <div className="border border-border/50 rounded-lg p-4">
-                  <div className="flex items-center gap-3 mb-2">
-                    <Users className="w-5 h-5 text-purple-600" />
-                    <h3 className="font-medium">Community Support</h3>
-                  </div>
-                  <p className="text-sm text-muted-foreground mb-3">
-                    Connect with other women in our supportive community
-                  </p>
-                  <Button size="sm" className="btn-feature" onClick={() => handleFeatureClick("https://carecircle-women-unite.vercel.app/")}>
-                    Join Community
-                  </Button>
-                </div>
-              </div>
-            </Card>
           </section>
+
+          {/* Recent Activity & Help Section */}
+          <div className="grid lg:grid-cols-2 gap-8">
+            {/* Recent Activity */}
+            <section>
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-xl font-semibold">Recent Activity</h2>
+                <Button variant="ghost" size="sm">View All</Button>
+              </div>
+              <Card className="card-elegant p-4">
+                <div className="space-y-4">
+                  {recentActivity.map((activity, index) => (
+                    <div key={index} className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-full bg-accent/20 flex items-center justify-center">
+                        <activity.icon className="w-4 h-4 text-accent-foreground" />
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-sm text-foreground">{activity.message}</p>
+                        <div className="flex items-center gap-2">
+                          <p className="text-xs text-muted-foreground">{activity.time}</p>
+                          {activity.status && (
+                            <span className="text-xs bg-orange-100 text-orange-800 px-2 py-1 rounded-full">
+                              {activity.status}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </Card>
+            </section>
+
+            {/* Help & Support */}
+            <section>
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-xl font-semibold">Need Help?</h2>
+                <Button 
+                  variant="ghost" 
+                  size="sm"
+                  onClick={handleHelpClick}
+                >
+                  <HelpCircle className="w-4 h-4 mr-1" />
+                  Get Support
+                </Button>
+              </div>
+              <Card className="card-elegant p-4">
+                <div className="space-y-4">
+                  <div className="border border-border/50 rounded-lg p-4">
+                    <div className="flex items-center gap-3 mb-2">
+                      <TrendingUp className="w-5 h-5 text-green-600" />
+                      <h3 className="font-medium">Quick Help</h3>
+                    </div>
+                    <p className="text-sm text-muted-foreground mb-3">
+                      Need assistance with any feature? Our support team is here 24/7
+                    </p>
+                    <Button size="sm" className="btn-feature" onClick={handleHelpClick}>
+                      Contact Support
+                    </Button>
+                  </div>
+                  
+                  <div className="border border-border/50 rounded-lg p-4">
+                    <div className="flex items-center gap-3 mb-2">
+                      <Users className="w-5 h-5 text-purple-600" />
+                      <h3 className="font-medium">Community Support</h3>
+                    </div>
+                    <p className="text-sm text-muted-foreground mb-3">
+                      Connect with other women in our supportive community
+                    </p>
+                    <Button size="sm" className="btn-feature" onClick={() => handleFeatureClick("https://carecircle-women-unite.vercel.app/")}>
+                      Join Community
+                    </Button>
+                  </div>
+                </div>
+              </Card>
+            </section>
+          </div>
         </div>
       </div>
-    </div>
+
+      <HelpPopup isOpen={isHelpOpen} onClose={() => setIsHelpOpen(false)} />
+    </>
   );
 };
 
