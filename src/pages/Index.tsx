@@ -1,9 +1,11 @@
+
 import { useState } from 'react';
-import { ArrowRight, Star, Users, Shield, Zap, Heart, FileText, Calendar, Stethoscope, Award } from 'lucide-react';
+import { ArrowRight, Star, Users, Shield, Zap, Heart, FileText, Calendar, Stethoscope, Award, Activity, UserCheck, Database, Building2, Syringe, MessageCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import Header from '@/components/Header';
 import Dashboard from '@/components/Dashboard';
+import FeatureCard from '@/components/FeatureCard';
 import heroWomen from '@/assets/hero-women.jpg';
 
 const Index = () => {
@@ -16,6 +18,13 @@ const Index = () => {
 
   const handleLogout = () => {
     setIsLoggedIn(false);
+  };
+
+  const scrollToAbout = () => {
+    const aboutSection = document.getElementById('about-section');
+    if (aboutSection) {
+      aboutSection.scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
   // If logged in, show dashboard
@@ -33,49 +42,79 @@ const Index = () => {
     );
   }
 
-  // Landing page for non-logged in users
+  // Feature cards with actual links
   const features = [
     {
       icon: Calendar,
       title: "SheCycle+",
-      description: "Smart period & mood tracking with AI predictions",
+      description: "Period & mood tracker with flow logs",
+      fullDescription: "Complete period & mood tracker with flow logs and smart reminders to help you understand your cycle better",
       users: "25k+ users",
-      color: "from-pink-400 to-red-400"
+      color: "from-pink-400 to-red-400",
+      link: "https://feminine-she-care-vpg6.vercel.app/"
+    },
+    {
+      icon: Activity,
+      title: "SymptoScan",
+      description: "AI symptom scanner with health insights",
+      fullDescription: "AI-powered symptom scanner offering verified health insights and personalized recommendations",
+      users: "18k+ users",
+      color: "from-blue-400 to-cyan-400",
+      link: "https://symptoscan-2mg1.onrender.com/"
     },
     {
       icon: Stethoscope,
-      title: "SymptoScan",
-      description: "AI-powered health symptom analyzer",
-      users: "18k+ users",
-      color: "from-blue-400 to-cyan-400"
-    },
-    {
-      icon: Heart,
       title: "GynConnect",
-      description: "Instant gynecologist consultations",
+      description: "Video & chat with verified gynecologists",
+      fullDescription: "Video & chat consulting with verified gynecologists for professional medical advice",
       users: "12k+ users",
-      color: "from-green-400 to-emerald-400"
+      color: "from-green-400 to-emerald-400",
+      link: "https://gyno-connect-oasis.vercel.app/"
     },
     {
-      icon: FileText,
+      icon: Database,
       title: "MediVault",
-      description: "Secure digital health records",
+      description: "Digital locker for health records",
+      fullDescription: "A secure digital locker for prescriptions, vitals, and health logs with encrypted storage",
       users: "30k+ users",
-      color: "from-purple-400 to-violet-400"
+      color: "from-purple-400 to-violet-400",
+      link: "https://medi-safe-journal-vault.vercel.app/"
     },
     {
       icon: Shield,
       title: "HealthYojana",
-      description: "Government health scheme navigator",
+      description: "Discover govt. health schemes",
+      fullDescription: "Discover women-centric government health schemes and get assistance with applications",
       users: "8k+ users",
-      color: "from-orange-400 to-amber-400"
+      color: "from-orange-400 to-amber-400",
+      link: "http://health-yojana.vercel.app/"
     },
     {
-      icon: Users,
-      title: "CareCircle",
-      description: "Peer support network connector",
+      icon: Building2,
+      title: "NGOHeal",
+      description: "Connect with NGOs for support",
+      fullDescription: "Connect with NGOs for help, shelter, and resources during difficult times",
       users: "15k+ users",
-      color: "from-teal-400 to-cyan-400"
+      color: "from-teal-400 to-cyan-400",
+      link: "https://ngo-heal.vercel.app/"
+    },
+    {
+      icon: MessageCircle,
+      title: "CareCircle",
+      description: "Peer support for mental health",
+      fullDescription: "Peer support rooms for emotional & mental health with trained moderators",
+      users: "20k+ users",
+      color: "from-indigo-400 to-purple-400",
+      link: "https://carecircle-women-unite.vercel.app/"
+    },
+    {
+      icon: Syringe,
+      title: "VaxAlert",
+      description: "Women's vaccine schedules & updates",
+      fullDescription: "Stay updated on latest women's vaccines and schedules with personalized reminders",
+      users: "10k+ users",
+      color: "from-rose-400 to-pink-400",
+      link: "https://vaxalert2.vercel.app/"
     }
   ];
 
@@ -139,11 +178,11 @@ const Index = () => {
               
               <div className="flex flex-col sm:flex-row gap-4">
                 <Button onClick={handleLogin} className="btn-hero text-lg px-8 py-4">
-                  Get Started Today
+                  Join Saarthi Today
                   <ArrowRight className="ml-2 w-5 h-5" />
                 </Button>
-                <Button variant="outline" className="btn-elegant text-lg px-8 py-4">
-                  Explore Features
+                <Button onClick={scrollToAbout} variant="outline" className="btn-elegant text-lg px-8 py-4">
+                  Learn More
                 </Button>
               </div>
               
@@ -179,7 +218,7 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Features Section */}
+      {/* Interactive Features Section */}
       <section className="py-20 bg-gradient-warm">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
@@ -195,31 +234,71 @@ const Index = () => {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {features.map((feature, index) => (
-              <Card key={index} className="card-feature p-6 text-center group">
-                <div className={`w-16 h-16 rounded-2xl bg-gradient-to-r ${feature.color} flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300`}>
-                  <feature.icon className="w-8 h-8 text-white" />
-                </div>
-                
-                <h3 className="text-xl font-semibold text-foreground mb-2">{feature.title}</h3>
-                <p className="text-muted-foreground mb-4">{feature.description}</p>
-                
-                <div className="text-sm text-accent-foreground mb-4 font-medium">
-                  {feature.users}
-                </div>
-                
-                <Button className="btn-feature w-full group-hover:scale-105 transition-transform duration-300">
-                  Experience Now →
-                </Button>
-              </Card>
+          {/* Feature Cards Grid - 2 rows of 4 */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            {features.slice(0, 4).map((feature, index) => (
+              <FeatureCard key={index} {...feature} />
+            ))}
+          </div>
+          
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {features.slice(4, 8).map((feature, index) => (
+              <FeatureCard key={index + 4} {...feature} />
             ))}
           </div>
         </div>
       </section>
 
+      {/* About Section */}
+      <section id="about-section" className="py-20">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">
+              About Saarthi Digital Hub
+            </h2>
+            <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+              Saarthi Digital Hub is India's leading women's health platform, combining cutting-edge technology 
+              with compassionate care to empower women across the country. Our mission is to make quality 
+              healthcare accessible, affordable, and approachable for every woman.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-12 items-center mb-16">
+            <div>
+              <h3 className="text-2xl font-bold text-foreground mb-4">Our Impact</h3>
+              <p className="text-muted-foreground mb-6">
+                Since our inception, we've conducted numerous health drives, awareness campaigns, and 
+                community outreach programs. Our team of certified healthcare professionals and 
+                technology experts work tirelessly to bridge the gap between women and quality healthcare.
+              </p>
+              <ul className="space-y-3 text-muted-foreground">
+                <li className="flex items-center gap-2">
+                  <Heart className="w-5 h-5 text-primary" />
+                  50,000+ women served across India
+                </li>
+                <li className="flex items-center gap-2">
+                  <Users className="w-5 h-5 text-primary" />
+                  200+ health camps conducted
+                </li>
+                <li className="flex items-center gap-2">
+                  <Award className="w-5 h-5 text-primary" />
+                  98% user satisfaction rate
+                </li>
+              </ul>
+            </div>
+            <div>
+              <img 
+                src={heroWomen} 
+                alt="Saarthi health drives and community impact"
+                className="rounded-xl shadow-elegant w-full"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Testimonials */}
-      <section className="py-20">
+      <section className="py-20 bg-muted/30">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">
@@ -268,10 +347,10 @@ const Index = () => {
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button onClick={handleLogin} className="btn-hero text-lg px-8 py-4">
-              Join Saarthi Today
+              Get Started Today
               <ArrowRight className="ml-2 w-5 h-5" />
             </Button>
-            <Button variant="outline" className="btn-elegant text-lg px-8 py-4">
+            <Button onClick={scrollToAbout} variant="outline" className="btn-elegant text-lg px-8 py-4">
               Learn More
             </Button>
           </div>

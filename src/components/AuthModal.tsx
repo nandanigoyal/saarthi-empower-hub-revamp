@@ -1,9 +1,9 @@
+
 import { useState } from 'react';
-import { X, Eye, EyeOff, Mail, Lock, User, Phone, MapPin, Calendar } from 'lucide-react';
+import { X, Eye, EyeOff, User, Mail, Lock, Phone, MapPin, Calendar } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { useToast } from '@/hooks/use-toast';
+import { Card } from '@/components/ui/card';
+import saarthiLogo from '@/assets/saarthi-logo.png';
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -14,339 +14,270 @@ interface AuthModalProps {
 const AuthModal = ({ isOpen, onClose, onLogin }: AuthModalProps) => {
   const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const { toast } = useToast();
-
-  const [loginForm, setLoginForm] = useState({
+  const [formData, setFormData] = useState({
+    name: '',
     email: '',
-    password: ''
-  });
-
-  const [signupForm, setSignupForm] = useState({
-    fullName: '',
-    email: '',
-    phone: '',
-    dateOfBirth: '',
-    city: '',
     password: '',
     confirmPassword: '',
-    agreeTerms: false
+    phone: '',
+    age: '',
+    city: ''
   });
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
   if (!isOpen) return null;
 
-  const handleLoginSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
     
-    if (!loginForm.email || !loginForm.password) {
-      toast({
-        title: "Error",
-        description: "Please fill in all fields",
-        variant: "destructive"
-      });
-      return;
+    // Clear error when user starts typing
+    if (errors[name]) {
+      setErrors(prev => ({ ...prev, [name]: '' }));
     }
-
-    // Simulate login success
-    toast({
-      title: "Welcome back!",
-      description: "Successfully logged in to your account"
-    });
-    onLogin();
-    onClose();
   };
 
-  const handleSignupSubmit = (e: React.FormEvent) => {
+  const validateForm = () => {
+    const newErrors: Record<string, string> = {};
+
+    if (!isLogin) {
+      // Signup validation
+      if (!formData.name.trim()) newErrors.name = 'Name is required';
+      if (!formData.phone.trim()) newErrors.phone = 'Phone number is required';
+      if (!formData.age.trim()) newErrors.age = 'Age is required';
+      if (!formData.city.trim()) newErrors.city = 'City is required';
+      if (formData.password !== formData.confirmPassword) {
+        newErrors.confirmPassword = 'Passwords do not match';
+      }
+    }
+
+    // Common validation
+    if (!formData.email.trim()) {
+      newErrors.email = 'Email is required';
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = 'Please enter a valid email';
+    }
+
+    if (!formData.password.trim()) {
+      newErrors.password = 'Password is required';
+    } else if (formData.password.length < 6) {
+      newErrors.password = 'Password must be at least 6 characters';
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    const { fullName, email, phone, dateOfBirth, city, password, confirmPassword, agreeTerms } = signupForm;
-    
-    if (!fullName || !email || !phone || !dateOfBirth || !city || !password || !confirmPassword) {
-      toast({
-        title: "Error",
-        description: "All fields are required to create an account",
-        variant: "destructive"
+    if (validateForm()) {
+      onLogin();
+      onClose();
+      // Reset form
+      setFormData({
+        name: '',
+        email: '',
+        password: '',
+        confirmPassword: '',
+        phone: '',
+        age: '',
+        city: ''
       });
-      return;
+      setErrors({});
     }
+  };
 
-    if (password !== confirmPassword) {
-      toast({
-        title: "Error",
-        description: "Passwords do not match",
-        variant: "destructive"
-      });
-      return;
-    }
-
-    if (password.length < 8) {
-      toast({
-        title: "Error", 
-        description: "Password must be at least 8 characters long",
-        variant: "destructive"
-      });
-      return;
-    }
-
-    if (!agreeTerms) {
-      toast({
-        title: "Error",
-        description: "Please agree to the Terms and Conditions",
-        variant: "destructive"
-      });
-      return;
-    }
-
-    // Simulate signup success
-    toast({
-      title: "Account Created!",
-      description: "Welcome to Saarthi Digital Hub"
+  const toggleAuthMode = () => {
+    setIsLogin(!isLogin);
+    setErrors({});
+    setFormData({
+      name: '',
+      email: '',
+      password: '',
+      confirmPassword: '',
+      phone: '',
+      age: '',
+      city: ''
     });
-    onLogin();
-    onClose();
   };
 
   return (
     <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-content max-w-md" onClick={(e) => e.stopPropagation()}>
-        {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-border/50">
-          <h2 className="text-xl font-bold text-foreground">
-            {isLogin ? 'Welcome Back' : 'Create Account'}
-          </h2>
-          <Button variant="ghost" size="icon" onClick={onClose}>
+      <div className="modal-content max-w-md" onClick={e => e.stopPropagation()}>
+        <Card className="card-elegant p-8 relative">
+          <button
+            onClick={onClose}
+            className="absolute top-4 right-4 text-muted-foreground hover:text-foreground transition-colors"
+          >
             <X className="w-5 h-5" />
-          </Button>
-        </div>
+          </button>
 
-        {/* Content */}
-        <div className="p-6">
-          {isLogin ? (
-            /* Login Form */
-            <form onSubmit={handleLoginSubmit} className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="email" className="text-sm font-medium">Email Address</Label>
-                <div className="relative">
-                  <Mail className="absolute left-3 top-3 w-4 h-4 text-muted-foreground" />
-                  <Input
-                    id="email"
-                    type="email"
-                    placeholder="Enter your email"
-                    value={loginForm.email}
-                    onChange={(e) => setLoginForm({...loginForm, email: e.target.value})}
-                    className="pl-10"
-                    required
+          {/* Logo and Welcome */}
+          <div className="text-center mb-8">
+            <img 
+              src={saarthiLogo} 
+              alt="Saarthi Digital Hub" 
+              className="h-16 w-auto mx-auto mb-4"
+            />
+            <h2 className="text-2xl font-bold text-foreground mb-2">
+              {isLogin ? 'Welcome Back!' : 'Get Started with Saarthi'}
+            </h2>
+            <p className="text-muted-foreground">
+              {isLogin 
+                ? 'Sign in to access your personalized health dashboard' 
+                : 'Create your account to begin your health journey'
+              }
+            </p>
+          </div>
+
+          <form onSubmit={handleSubmit} className="space-y-4">
+            {!isLogin && (
+              <>
+                <div>
+                  <label className="block text-sm font-medium text-foreground mb-2">
+                    <User className="w-4 h-4 inline mr-2" />
+                    Full Name *
+                  </label>
+                  <input
+                    type="text"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                    placeholder="Enter your full name"
                   />
+                  {errors.name && <p className="text-destructive text-sm mt-1">{errors.name}</p>}
                 </div>
-              </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="password" className="text-sm font-medium">Password</Label>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-3 w-4 h-4 text-muted-foreground" />
-                  <Input
-                    id="password"
-                    type={showPassword ? 'text' : 'password'}
-                    placeholder="Enter your password"
-                    value={loginForm.password}
-                    onChange={(e) => setLoginForm({...loginForm, password: e.target.value})}
-                    className="pl-10 pr-10"
-                    required
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-foreground mb-2">
+                      <Phone className="w-4 h-4 inline mr-2" />
+                      Phone *
+                    </label>
+                    <input
+                      type="tel"
+                      name="phone"
+                      value={formData.phone}
+                      onChange={handleInputChange}
+                      className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                      placeholder="Phone number"
+                    />
+                    {errors.phone && <p className="text-destructive text-sm mt-1">{errors.phone}</p>}
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-foreground mb-2">
+                      <Calendar className="w-4 h-4 inline mr-2" />
+                      Age *
+                    </label>
+                    <input
+                      type="number"
+                      name="age"
+                      value={formData.age}
+                      onChange={handleInputChange}
+                      className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                      placeholder="Age"
+                    />
+                    {errors.age && <p className="text-destructive text-sm mt-1">{errors.age}</p>}
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-foreground mb-2">
+                    <MapPin className="w-4 h-4 inline mr-2" />
+                    City *
+                  </label>
+                  <input
+                    type="text"
+                    name="city"
+                    value={formData.city}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                    placeholder="Your city"
                   />
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="icon"
-                    className="absolute right-0 top-0 h-full px-3"
-                    onClick={() => setShowPassword(!showPassword)}
-                  >
-                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                  </Button>
+                  {errors.city && <p className="text-destructive text-sm mt-1">{errors.city}</p>}
                 </div>
-              </div>
+              </>
+            )}
 
-              <div className="flex items-center justify-between text-sm">
-                <label className="flex items-center">
-                  <input type="checkbox" className="mr-2" />
-                  <span className="text-muted-foreground">Remember me</span>
-                </label>
-                <button type="button" className="text-primary hover:underline">
-                  Forgot Password?
+            <div>
+              <label className="block text-sm font-medium text-foreground mb-2">
+                <Mail className="w-4 h-4 inline mr-2" />
+                Email Address *
+              </label>
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleInputChange}
+                className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                placeholder="Enter your email"
+              />
+              {errors.email && <p className="text-destructive text-sm mt-1">{errors.email}</p>}
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-foreground mb-2">
+                <Lock className="w-4 h-4 inline mr-2" />
+                Password *
+              </label>
+              <div className="relative">
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  name="password"
+                  value={formData.password}
+                  onChange={handleInputChange}
+                  className="w-full px-4 py-3 pr-12 border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                  placeholder="Create a password"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                >
+                  {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>
               </div>
+              {errors.password && <p className="text-destructive text-sm mt-1">{errors.password}</p>}
+            </div>
 
-              <Button type="submit" className="w-full btn-hero">
-                Sign In
-              </Button>
-            </form>
-          ) : (
-            /* Signup Form */
-            <form onSubmit={handleSignupSubmit} className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="fullName" className="text-sm font-medium">Full Name</Label>
-                <div className="relative">
-                  <User className="absolute left-3 top-3 w-4 h-4 text-muted-foreground" />
-                  <Input
-                    id="fullName"
-                    type="text"
-                    placeholder="Enter your full name"
-                    value={signupForm.fullName}
-                    onChange={(e) => setSignupForm({...signupForm, fullName: e.target.value})}
-                    className="pl-10"
-                    required
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="signupEmail" className="text-sm font-medium">Email Address</Label>
-                <div className="relative">
-                  <Mail className="absolute left-3 top-3 w-4 h-4 text-muted-foreground" />
-                  <Input
-                    id="signupEmail"
-                    type="email"
-                    placeholder="Enter your email"
-                    value={signupForm.email}
-                    onChange={(e) => setSignupForm({...signupForm, email: e.target.value})}
-                    className="pl-10"
-                    required
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="phone" className="text-sm font-medium">Phone Number</Label>
-                <div className="relative">
-                  <Phone className="absolute left-3 top-3 w-4 h-4 text-muted-foreground" />
-                  <Input
-                    id="phone"
-                    type="tel"
-                    placeholder="Enter your phone number"
-                    value={signupForm.phone}
-                    onChange={(e) => setSignupForm({...signupForm, phone: e.target.value})}
-                    className="pl-10"
-                    required
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="dateOfBirth" className="text-sm font-medium">Date of Birth</Label>
-                  <div className="relative">
-                    <Calendar className="absolute left-3 top-3 w-4 h-4 text-muted-foreground" />
-                    <Input
-                      id="dateOfBirth"
-                      type="date"
-                      value={signupForm.dateOfBirth}
-                      onChange={(e) => setSignupForm({...signupForm, dateOfBirth: e.target.value})}
-                      className="pl-10"
-                      required
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="city" className="text-sm font-medium">City</Label>
-                  <div className="relative">
-                    <MapPin className="absolute left-3 top-3 w-4 h-4 text-muted-foreground" />
-                    <Input
-                      id="city"
-                      type="text"
-                      placeholder="Your city"
-                      value={signupForm.city}
-                      onChange={(e) => setSignupForm({...signupForm, city: e.target.value})}
-                      className="pl-10"
-                      required
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="signupPassword" className="text-sm font-medium">Password</Label>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-3 w-4 h-4 text-muted-foreground" />
-                  <Input
-                    id="signupPassword"
-                    type={showPassword ? 'text' : 'password'}
-                    placeholder="Create a password"
-                    value={signupForm.password}
-                    onChange={(e) => setSignupForm({...signupForm, password: e.target.value})}
-                    className="pl-10 pr-10"
-                    required
-                  />
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="icon"
-                    className="absolute right-0 top-0 h-full px-3"
-                    onClick={() => setShowPassword(!showPassword)}
-                  >
-                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                  </Button>
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="confirmPassword" className="text-sm font-medium">Confirm Password</Label>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-3 w-4 h-4 text-muted-foreground" />
-                  <Input
-                    id="confirmPassword"
-                    type={showConfirmPassword ? 'text' : 'password'}
-                    placeholder="Confirm your password"
-                    value={signupForm.confirmPassword}
-                    onChange={(e) => setSignupForm({...signupForm, confirmPassword: e.target.value})}
-                    className="pl-10 pr-10"
-                    required
-                  />
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="icon"
-                    className="absolute right-0 top-0 h-full px-3"
-                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  >
-                    {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                  </Button>
-                </div>
-              </div>
-
-              <div className="flex items-start space-x-2">
+            {!isLogin && (
+              <div>
+                <label className="block text-sm font-medium text-foreground mb-2">
+                  <Lock className="w-4 h-4 inline mr-2" />
+                  Confirm Password *
+                </label>
                 <input
-                  type="checkbox"
-                  id="agreeTerms"
-                  checked={signupForm.agreeTerms}
-                  onChange={(e) => setSignupForm({...signupForm, agreeTerms: e.target.checked})}
-                  className="mt-1"
-                  required
+                  type="password"
+                  name="confirmPassword"
+                  value={formData.confirmPassword}
+                  onChange={handleInputChange}
+                  className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                  placeholder="Confirm your password"
                 />
-                <Label htmlFor="agreeTerms" className="text-sm text-muted-foreground leading-5">
-                  I agree to the <button type="button" className="text-primary hover:underline">Terms and Conditions</button> and <button type="button" className="text-primary hover:underline">Privacy Policy</button>
-                </Label>
+                {errors.confirmPassword && <p className="text-destructive text-sm mt-1">{errors.confirmPassword}</p>}
               </div>
+            )}
 
-              <Button type="submit" className="w-full btn-hero">
-                Create Account
-              </Button>
-            </form>
-          )}
+            <Button type="submit" className="btn-hero w-full text-lg py-3 mt-6">
+              {isLogin ? 'Sign In' : 'Create Account'}
+            </Button>
+          </form>
 
-          {/* Toggle Form */}
-          <div className="mt-6 text-center">
-            <p className="text-sm text-muted-foreground">
+          <div className="text-center mt-6 pt-6 border-t border-border">
+            <p className="text-muted-foreground">
               {isLogin ? "Don't have an account?" : "Already have an account?"}
               <button
-                type="button"
-                onClick={() => setIsLogin(!isLogin)}
-                className="ml-1 text-primary hover:underline font-medium"
+                onClick={toggleAuthMode}
+                className="ml-2 text-primary hover:text-primary/80 font-medium"
               >
-                {isLogin ? 'Sign up here' : 'Sign in here'}
+                {isLogin ? 'Create Account' : 'Sign In'}
               </button>
             </p>
           </div>
-        </div>
+        </Card>
       </div>
     </div>
   );
