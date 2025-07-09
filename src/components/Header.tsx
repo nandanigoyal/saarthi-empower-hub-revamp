@@ -21,16 +21,23 @@ const Header = ({ isLoggedIn, userDashboard = false, userName = 'User', onLogin,
   const [isExploreOpen, setIsExploreOpen] = useState(false);
   const [isAboutOpen, setIsAboutOpen] = useState(false);
   const [isAuthOpen, setIsAuthOpen] = useState(false);
+  const [authMode, setAuthMode] = useState<'login' | 'signup'>('login');
   const [isHelpOpen, setIsHelpOpen] = useState(false);
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
   const [settingsDropdownOpen, setSettingsDropdownOpen] = useState(false);
 
-  const handleAuthClick = () => {
+  const handleAuthClick = (mode: 'login' | 'signup' = 'login') => {
     if (isLoggedIn) {
       setUserDropdownOpen(!userDropdownOpen);
     } else {
+      setAuthMode(mode);
       setIsAuthOpen(true);
     }
+  };
+
+  const handleSignUpClick = () => {
+    setAuthMode('signup');
+    setIsAuthOpen(true);
   };
 
   const handleHomeClick = () => {
@@ -53,6 +60,11 @@ const Header = ({ isLoggedIn, userDashboard = false, userName = 'User', onLogin,
 
   const handleAuthLogin = (name: string) => {
     onLogin(name);
+  };
+
+  const handleAboutSignUp = () => {
+    setAuthMode('signup');
+    setIsAuthOpen(true);
   };
 
   return (
@@ -107,13 +119,13 @@ const Header = ({ isLoggedIn, userDashboard = false, userName = 'User', onLogin,
                 <>
                   <Button 
                     variant="ghost" 
-                    onClick={handleAuthClick}
+                    onClick={() => handleAuthClick('login')}
                     className="text-foreground hover:text-primary"
                   >
                     Login
                   </Button>
                   <Button 
-                    onClick={handleAuthClick}
+                    onClick={handleSignUpClick}
                     className="btn-hero"
                   >
                     Sign Up
@@ -146,7 +158,7 @@ const Header = ({ isLoggedIn, userDashboard = false, userName = 'User', onLogin,
                   <div className="relative">
                     <Button
                       variant="ghost"
-                      onClick={handleAuthClick}
+                      onClick={() => handleAuthClick('login')}
                       className="flex items-center gap-2"
                     >
                       <User className="w-4 h-4" />
@@ -205,10 +217,10 @@ const Header = ({ isLoggedIn, userDashboard = false, userName = 'User', onLogin,
                 
                 {!isLoggedIn ? (
                   <div className="flex flex-col space-y-2 pt-4">
-                    <Button variant="ghost" onClick={handleAuthClick}>
+                    <Button variant="ghost" onClick={() => handleAuthClick('login')}>
                       Login
                     </Button>
-                    <Button onClick={handleAuthClick} className="btn-hero">
+                    <Button onClick={handleSignUpClick} className="btn-hero">
                       Sign Up
                     </Button>
                   </div>
@@ -228,8 +240,8 @@ const Header = ({ isLoggedIn, userDashboard = false, userName = 'User', onLogin,
 
       {/* Modals */}
       <ExploreModal isOpen={isExploreOpen} onClose={() => setIsExploreOpen(false)} onLogin={handleExploreLogin} />
-      <AboutModal isOpen={isAboutOpen} onClose={() => setIsAboutOpen(false)} onOpenAuth={() => setIsAuthOpen(true)} />
-      <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} onLogin={handleAuthLogin} />
+      <AboutModal isOpen={isAboutOpen} onClose={() => setIsAboutOpen(false)} onOpenAuth={handleAboutSignUp} />
+      <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} onLogin={handleAuthLogin} defaultMode={authMode} />
       <HelpPopup isOpen={isHelpOpen} onClose={() => setIsHelpOpen(false)} />
     </>
   );

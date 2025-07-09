@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { X, ArrowLeft, Eye, EyeOff } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -8,10 +9,11 @@ interface AuthModalProps {
   isOpen: boolean;
   onClose: () => void;
   onLogin: (name: string) => void;
+  defaultMode?: 'login' | 'signup';
 }
 
-const AuthModal = ({ isOpen, onClose, onLogin }: AuthModalProps) => {
-  const [isLogin, setIsLogin] = useState(true);
+const AuthModal = ({ isOpen, onClose, onLogin, defaultMode = 'login' }: AuthModalProps) => {
+  const [isLogin, setIsLogin] = useState(defaultMode === 'login');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [formData, setFormData] = useState({
@@ -25,6 +27,13 @@ const AuthModal = ({ isOpen, onClose, onLogin }: AuthModalProps) => {
     termsAccepted: false
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
+
+  // Reset form mode when modal opens with different default
+  useState(() => {
+    if (isOpen) {
+      setIsLogin(defaultMode === 'login');
+    }
+  });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
@@ -76,7 +85,8 @@ const AuthModal = ({ isOpen, onClose, onLogin }: AuthModalProps) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (validateForm()) {
-      const userName = formData.name || 'User';
+      // Use the exact name entered, with proper capitalization preserved
+      const userName = formData.name.trim() || 'User';
       onLogin(userName);
       onClose();
     }
