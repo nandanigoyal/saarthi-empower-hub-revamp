@@ -228,7 +228,7 @@ const Header = ({ isLoggedIn, userDashboard = false, userName = 'User', onLogin,
 
       {/* Modals */}
       <ExploreModal isOpen={isExploreOpen} onClose={() => setIsExploreOpen(false)} onLogin={handleExploreLogin} />
-      <AboutModal isOpen={isAboutOpen} onClose={() => setIsAboutOpen(false)} />
+      <AboutModal isOpen={isAboutOpen} onClose={() => setIsAboutOpen(false)} onOpenAuth={() => setIsAuthOpen(true)} />
       <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} onLogin={handleAuthLogin} />
       <HelpPopup isOpen={isHelpOpen} onClose={() => setIsHelpOpen(false)} />
     </>

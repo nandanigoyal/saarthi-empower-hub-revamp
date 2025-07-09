@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { X, ArrowLeft, Eye, EyeOff } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -8,7 +7,7 @@ import SaarthiLogo from './SaarthiLogo';
 interface AuthModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onLogin: () => void;
+  onLogin: (name: string) => void;
 }
 
 const AuthModal = ({ isOpen, onClose, onLogin }: AuthModalProps) => {
@@ -77,7 +76,8 @@ const AuthModal = ({ isOpen, onClose, onLogin }: AuthModalProps) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (validateForm()) {
-      onLogin();
+      const userName = formData.name || 'User';
+      onLogin(userName);
       onClose();
     }
   };
@@ -109,28 +109,28 @@ const AuthModal = ({ isOpen, onClose, onLogin }: AuthModalProps) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-      <Card className="card-elegant w-full max-w-md max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50 animate-fade-in">
+      <Card className="card-elegant w-full max-w-md max-h-[90vh] overflow-y-auto animate-scale-in hover:scale-105 transition-transform duration-300">
         <div className="p-6">
           {/* Header */}
           <div className="flex items-center justify-between mb-6">
-            <Button variant="ghost" size="icon" onClick={handleClose}>
+            <Button variant="ghost" size="icon" onClick={handleClose} className="hover:scale-110 transition-transform">
               <ArrowLeft className="w-5 h-5" />
             </Button>
-            <Button variant="ghost" size="icon" onClick={handleClose}>
+            <Button variant="ghost" size="icon" onClick={handleClose} className="hover:scale-110 transition-transform">
               <X className="w-5 h-5" />
             </Button>
           </div>
 
           {/* Logo and Title */}
           <div className="text-center mb-6">
-            <div className="flex justify-center mb-4">
+            <div className="flex justify-center mb-4 animate-pulse">
               <SaarthiLogo size="lg" />
             </div>
-            <h2 className="text-2xl font-bold text-foreground mb-2">
+            <h2 className="text-2xl font-bold text-foreground mb-2 animate-fade-in">
               {isLogin ? 'Welcome Back!' : 'Get Started with Saarthi'}
             </h2>
-            <p className="text-muted-foreground">
+            <p className="text-muted-foreground animate-fade-in">
               {isLogin 
                 ? 'Sign in to access your personalized health dashboard' 
                 : 'Create your account to begin your health journey'
@@ -142,7 +142,7 @@ const AuthModal = ({ isOpen, onClose, onLogin }: AuthModalProps) => {
           <form onSubmit={handleSubmit} className="space-y-4">
             {!isLogin && (
               <>
-                <div>
+                <div className="animate-slide-in-right">
                   <label className="block text-sm font-medium text-foreground mb-2">
                     Full Name *
                   </label>
@@ -151,12 +151,12 @@ const AuthModal = ({ isOpen, onClose, onLogin }: AuthModalProps) => {
                     name="name"
                     value={formData.name}
                     onChange={handleInputChange}
-                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent ${
+                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-300 hover:scale-105 ${
                       errors.name ? 'border-red-500' : 'border-border'
                     }`}
                     placeholder="Enter your full name"
                   />
-                  {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
+                  {errors.name && <p className="text-red-500 text-sm mt-1 animate-fade-in">{errors.name}</p>}
                 </div>
 
                 <div>
@@ -214,7 +214,7 @@ const AuthModal = ({ isOpen, onClose, onLogin }: AuthModalProps) => {
               </>
             )}
 
-            <div>
+            <div className="animate-slide-in-right">
               <label className="block text-sm font-medium text-foreground mb-2">
                 Email Address *
               </label>
@@ -223,12 +223,12 @@ const AuthModal = ({ isOpen, onClose, onLogin }: AuthModalProps) => {
                 name="email"
                 value={formData.email}
                 onChange={handleInputChange}
-                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent ${
+                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-300 hover:scale-105 ${
                   errors.email ? 'border-red-500' : 'border-border'
                 }`}
                 placeholder="Enter your email"
               />
-              {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
+              {errors.email && <p className="text-red-500 text-sm mt-1 animate-fade-in">{errors.email}</p>}
             </div>
 
             <div>
@@ -312,18 +312,18 @@ const AuthModal = ({ isOpen, onClose, onLogin }: AuthModalProps) => {
               </div>
             )}
 
-            <Button type="submit" className="btn-hero w-full py-3 text-lg">
+            <Button type="submit" className="btn-hero w-full py-3 text-lg hover:scale-105 transition-transform duration-300 animate-fade-in">
               {isLogin ? 'Sign In' : 'Create Account'}
             </Button>
           </form>
 
           {/* Switch Mode */}
-          <div className="text-center mt-6">
+          <div className="text-center mt-6 animate-fade-in">
             <p className="text-muted-foreground">
               {isLogin ? "Don't have an account?" : 'Already have an account?'}
               <button
                 onClick={switchMode}
-                className="text-primary hover:underline ml-1 font-medium"
+                className="text-primary hover:underline ml-1 font-medium hover:scale-105 transition-transform duration-300"
               >
                 {isLogin ? 'Sign Up' : 'Sign In'}
               </button>

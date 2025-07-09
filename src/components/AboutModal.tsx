@@ -5,10 +5,16 @@ import aboutDrives from '@/assets/about-drives.jpg';
 interface AboutModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onOpenAuth: () => void;
 }
 
-const AboutModal = ({ isOpen, onClose }: AboutModalProps) => {
+const AboutModal = ({ isOpen, onClose, onOpenAuth }: AboutModalProps) => {
   if (!isOpen) return null;
+
+  const handleJoinMission = () => {
+    onClose();
+    onOpenAuth();
+  };
 
   const stats = [
     { icon: Users, value: "50,000+", label: "Women Served" },
@@ -186,7 +192,9 @@ const AboutModal = ({ isOpen, onClose }: AboutModalProps) => {
           </div>
           
           <div className="text-center mt-6">
-            <Button className="btn-hero">Join Our Mission</Button>
+            <Button className="btn-hero hover:scale-105 transition-transform duration-300" onClick={handleJoinMission}>
+              Join Our Mission
+            </Button>
           </div>
         </div>
       </div>
