@@ -166,39 +166,13 @@ const Dashboard = ({ userName }: DashboardProps) => {
         {/* Welcome Section */}
         <div className="bg-gradient-hero text-white">
           <div className="container mx-auto px-4 py-8">
-            <div className="flex items-center justify-between">
-              <div>
-                <h1 className="text-3xl font-bold mb-2">
-                  Welcome back, {userName}! 👋
-                </h1>
-                <p className="text-white/80">
-                  Here's your personalized health dashboard for today
-                </p>
-              </div>
-              <div className="flex gap-2">
-                <Button 
-                  variant="secondary" 
-                  size="icon"
-                  onClick={() => setShowProfilePopup(!showProfilePopup)}
-                  className="relative"
-                >
-                  <User className="w-5 h-5" />
-                  {showProfilePopup && (
-                    <div className="absolute top-12 right-0 bg-card border border-border rounded-lg shadow-elegant p-4 z-50 w-64">
-                      <h3 className="font-semibold text-foreground mb-2">Profile Summary</h3>
-                      <div className="space-y-2 text-sm">
-                        <p className="text-muted-foreground">Member since: <span className="text-foreground">March 2023</span></p>
-                        <p className="text-muted-foreground">Time with Saarthi: <span className="text-foreground">1.2 years</span></p>
-                        <p className="text-muted-foreground">Health Score: <span className="text-green-600 font-medium">85/100</span></p>
-                        <p className="text-muted-foreground">Features Used: <span className="text-foreground">{usedFeaturesCount}/8</span></p>
-                      </div>
-                    </div>
-                  )}
-                </Button>
-                <Button variant="secondary" size="icon">
-                  <Settings className="w-5 h-5" />
-                </Button>
-              </div>
+            <div>
+              <h1 className="text-3xl font-bold mb-2">
+                Welcome back, {userName}! 👋
+              </h1>
+              <p className="text-white/80">
+                Here's your personalized health dashboard for today
+              </p>
             </div>
           </div>
         </div>
