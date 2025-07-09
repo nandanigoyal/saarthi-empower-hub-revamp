@@ -74,15 +74,89 @@ const ExploreModal = ({ isOpen, onClose }: ExploreModalProps) => {
   ];
 
   const features = [
-    { icon: Calendar, name: "SheCycle+", users: "25k+", color: "from-rose-400 to-pink-500" },
-    { icon: Activity, name: "SymptoScan", users: "18k+", color: "from-blue-400 to-cyan-500" },
-    { icon: Stethoscope, name: "GynConnect", users: "12k+", color: "from-emerald-400 to-green-500" },
-    { icon: Database, name: "MediVault", users: "30k+", color: "from-purple-400 to-violet-500" },
-    { icon: Shield, name: "HealthYojana", users: "8k+", color: "from-amber-400 to-orange-500" },
-    { icon: Building2, name: "NGOHeal", users: "15k+", color: "from-teal-400 to-cyan-500" },
-    { icon: MessageCircle, name: "CareCircle", users: "20k+", color: "from-indigo-400 to-purple-500" },
-    { icon: Heart, name: "VaxAlert", users: "10k+", color: "from-pink-400 to-rose-500" }
+    { 
+      icon: Calendar, 
+      name: "SheCycle+", 
+      users: "25k+", 
+      color: "from-rose-400 to-pink-500", 
+      link: "https://feminine-she-care-vpg6.vercel.app/" 
+    },
+    { 
+      icon: Activity, 
+      name: "SymptoScan", 
+      users: "18k+", 
+      color: "from-blue-400 to-cyan-500", 
+      link: "https://symptoscan-2mg1.onrender.com/" 
+    },
+    { 
+      icon: Stethoscope, 
+      name: "GynConnect", 
+      users: "12k+", 
+      color: "from-emerald-400 to-green-500", 
+      link: "https://gyno-connect-oasis.vercel.app/" 
+    },
+    { 
+      icon: Database, 
+      name: "MediVault", 
+      users: "30k+", 
+      color: "from-purple-400 to-violet-500", 
+      link: "https://medi-safe-journal-vault.vercel.app/" 
+    },
+    { 
+      icon: FileText, 
+      name: "HealthYojana", 
+      users: "8k+", 
+      color: "from-amber-400 to-orange-500", 
+      link: "http://health-yojana.vercel.app/" 
+    },
+    { 
+      icon: Building2, 
+      name: "NGOHeal", 
+      users: "15k+", 
+      color: "from-teal-400 to-cyan-500", 
+      link: "https://ngo-heal.vercel.app/" 
+    },
+    { 
+      icon: MessageCircle, 
+      name: "CareCircle", 
+      users: "20k+", 
+      color: "from-indigo-400 to-purple-500", 
+      link: "https://carecircle-women-unite.vercel.app/" 
+    },
+    { 
+      icon: Shield, 
+      name: "VaxAlert", 
+      users: "10k+", 
+      color: "from-pink-400 to-rose-500", 
+      link: "https://vaxalert2.vercel.app/" 
+    }
   ];
+
+  const handleFeatureClick = (link: string) => {
+    window.open(link, '_blank', 'noopener,noreferrer');
+  };
+
+  const handleGetStarted = () => {
+    onClose();
+    // Trigger login modal
+    setTimeout(() => {
+      const loginButton = document.querySelector('[data-auth-modal]') as HTMLButtonElement;
+      if (loginButton) {
+        loginButton.click();
+      }
+    }, 100);
+  };
+
+  const handleLearnMore = () => {
+    onClose();
+    // Scroll to about section
+    setTimeout(() => {
+      const aboutSection = document.getElementById('about-section');
+      if (aboutSection) {
+        aboutSection.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 100);
+  };
 
   return (
     <div className="modal-overlay" onClick={onClose}>
@@ -105,7 +179,11 @@ const ExploreModal = ({ isOpen, onClose }: ExploreModalProps) => {
           <h3 className="text-lg font-semibold mb-4 text-center">Our Complete Service Suite</h3>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {features.map((feature, index) => (
-              <div key={index} className="card-feature p-4 text-center group hover:scale-105 transition-all duration-300">
+              <div 
+                key={index} 
+                className="card-feature p-4 text-center group hover:scale-105 transition-all duration-300 cursor-pointer"
+                onClick={() => handleFeatureClick(feature.link)}
+              >
                 <div className={`w-12 h-12 rounded-2xl bg-gradient-to-r ${feature.color} flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform duration-300`}>
                   <feature.icon className="w-6 h-6 text-white" />
                 </div>
@@ -170,8 +248,19 @@ const ExploreModal = ({ isOpen, onClose }: ExploreModalProps) => {
             <h3 className="text-lg font-semibold mb-2">Ready to Start Your Journey?</h3>
             <p className="text-white/80 mb-4">Join thousands of women who trust Saarthi for their health</p>
             <div className="flex gap-3 justify-center">
-              <Button className="bg-white text-primary hover:bg-white/90">Get Started Today</Button>
-              <Button variant="outline" className="border-white text-white hover:bg-white/10">Learn More</Button>
+              <Button 
+                onClick={handleGetStarted}
+                className="bg-white text-primary hover:bg-white/90"
+              >
+                Get Started Today
+              </Button>
+              <Button 
+                onClick={handleLearnMore}
+                variant="outline" 
+                className="border-white text-white hover:bg-white/10"
+              >
+                Learn More
+              </Button>
             </div>
           </div>
         </div>

@@ -11,17 +11,19 @@ import SaarthiLogo from './SaarthiLogo';
 interface HeaderProps {
   isLoggedIn: boolean;
   userDashboard?: boolean;
-  onLogin: () => void;
+  userName?: string;
+  onLogin: (name: string) => void;
   onLogout: () => void;
 }
 
-const Header = ({ isLoggedIn, userDashboard = false, onLogin, onLogout }: HeaderProps) => {
+const Header = ({ isLoggedIn, userDashboard = false, userName = 'User', onLogin, onLogout }: HeaderProps) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isExploreOpen, setIsExploreOpen] = useState(false);
   const [isAboutOpen, setIsAboutOpen] = useState(false);
   const [isAuthOpen, setIsAuthOpen] = useState(false);
   const [isHelpOpen, setIsHelpOpen] = useState(false);
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
+  const [settingsDropdownOpen, setSettingsDropdownOpen] = useState(false);
 
   const handleAuthClick = () => {
     if (isLoggedIn) {
@@ -33,12 +35,16 @@ const Header = ({ isLoggedIn, userDashboard = false, onLogin, onLogout }: Header
 
   const handleHomeClick = () => {
     if (userDashboard) {
-      window.location.reload(); // This will take to landing page
+      window.location.reload();
     }
   };
 
   const handleHelpClick = () => {
     setIsHelpOpen(true);
+  };
+
+  const handleSettingsClick = () => {
+    setSettingsDropdownOpen(!settingsDropdownOpen);
   };
 
   return (
@@ -87,7 +93,7 @@ const Header = ({ isLoggedIn, userDashboard = false, onLogin, onLogout }: Header
               </nav>
             </div>
 
-            {/* Auth Section - Right aligned */}
+            {/* Right side - Auth and Settings */}
             <div className="hidden md:flex items-center space-x-4">
               {!isLoggedIn ? (
                 <>
@@ -106,38 +112,50 @@ const Header = ({ isLoggedIn, userDashboard = false, onLogin, onLogout }: Header
                   </Button>
                 </>
               ) : (
-                <div className="relative">
-                  <Button
-                    variant="ghost"
-                    onClick={handleAuthClick}
-                    className="flex items-center gap-2"
-                  >
-                    <User className="w-4 h-4" />
-                    <span>Account</span>
-                    <ChevronDown className="w-4 h-4" />
-                  </Button>
+                <>
+                  <div className="relative">
+                    <Button
+                      variant="ghost"
+                      onClick={handleSettingsClick}
+                      className="flex items-center gap-2 relative"
+                    >
+                      <Settings className="w-4 h-4" />
+                    </Button>
+                    
+                    {settingsDropdownOpen && (
+                      <div className="absolute right-0 mt-2 w-48 bg-card border border-border rounded-lg shadow-elegant py-2 z-50">
+                        <button 
+                          onClick={onLogout}
+                          className="w-full px-4 py-2 text-left hover:bg-muted flex items-center gap-2 text-destructive"
+                        >
+                          <LogOut className="w-4 h-4" />
+                          Logout
+                        </button>
+                      </div>
+                    )}
+                  </div>
                   
-                  {userDropdownOpen && (
-                    <div className="absolute right-0 mt-2 w-48 bg-card border border-border rounded-lg shadow-elegant py-2 z-50">
-                      <button className="w-full px-4 py-2 text-left hover:bg-muted flex items-center gap-2">
-                        <User className="w-4 h-4" />
-                        Profile
-                      </button>
-                      <button className="w-full px-4 py-2 text-left hover:bg-muted flex items-center gap-2">
-                        <Settings className="w-4 h-4" />
-                        Settings
-                      </button>
-                      <hr className="my-2 border-border" />
-                      <button 
-                        onClick={onLogout}
-                        className="w-full px-4 py-2 text-left hover:bg-muted flex items-center gap-2 text-destructive"
-                      >
-                        <LogOut className="w-4 h-4" />
-                        Logout
-                      </button>
-                    </div>
-                  )}
-                </div>
+                  <div className="relative">
+                    <Button
+                      variant="ghost"
+                      onClick={handleAuthClick}
+                      className="flex items-center gap-2"
+                    >
+                      <User className="w-4 h-4" />
+                      <span>Account</span>
+                      <ChevronDown className="w-4 h-4" />
+                    </Button>
+                    
+                    {userDropdownOpen && (
+                      <div className="absolute right-0 mt-2 w-48 bg-card border border-border rounded-lg shadow-elegant py-2 z-50">
+                        <button className="w-full px-4 py-2 text-left hover:bg-muted flex items-center gap-2">
+                          <User className="w-4 h-4" />
+                          Profile
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                </>
               )}
             </div>
 

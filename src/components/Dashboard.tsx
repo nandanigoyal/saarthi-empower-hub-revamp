@@ -1,5 +1,4 @@
-
-import { Calendar, Heart, FileText, Users, TrendingUp, Bell, Settings, HelpCircle, ExternalLink, Activity, Database, Building2, Syringe, MessageCircle, Shield, User } from 'lucide-react';
+import { Calendar, Heart, FileText, Users, TrendingUp, Settings, HelpCircle, ExternalLink, Activity, Database, Building2, Syringe, MessageCircle, Shield, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { useState } from 'react';
@@ -21,7 +20,8 @@ const Dashboard = ({ userName }: DashboardProps) => {
       progress: 85,
       lastUsed: "2 days ago",
       color: "from-rose-400 to-pink-500",
-      link: "https://feminine-she-care-vpg6.vercel.app/"
+      link: "https://feminine-she-care-vpg6.vercel.app/",
+      used: true
     },
     {
       icon: Activity,
@@ -30,7 +30,8 @@ const Dashboard = ({ userName }: DashboardProps) => {
       progress: 70,
       lastUsed: "5 days ago",
       color: "from-blue-400 to-cyan-500",
-      link: "https://symptoscan-2mg1.onrender.com/"
+      link: "https://symptoscan-2mg1.onrender.com/",
+      used: true
     },
     {
       icon: Heart,
@@ -39,7 +40,8 @@ const Dashboard = ({ userName }: DashboardProps) => {
       progress: 60,
       lastUsed: "1 week ago",
       color: "from-emerald-400 to-green-500",
-      link: "https://gyno-connect-oasis.vercel.app/"
+      link: "https://gyno-connect-oasis.vercel.app/",
+      used: true
     },
     {
       icon: Database,
@@ -48,25 +50,28 @@ const Dashboard = ({ userName }: DashboardProps) => {
       progress: 90,
       lastUsed: "1 day ago",
       color: "from-purple-400 to-violet-500",
-      link: "https://medi-safe-journal-vault.vercel.app/"
+      link: "https://medi-safe-journal-vault.vercel.app/",
+      used: true
     },
     {
       icon: FileText,
       title: "HealthYojana",
       description: "Government schemes",
-      progress: 45,
-      lastUsed: "2 weeks ago",
+      progress: 0,
+      lastUsed: "Never used",
       color: "from-amber-400 to-orange-500",
-      link: "http://health-yojana.vercel.app/"
+      link: "http://health-yojana.vercel.app/",
+      used: false
     },
     {
       icon: Building2,
       title: "NGOHeal",
       description: "NGO support network",
-      progress: 30,
-      lastUsed: "3 weeks ago",
+      progress: 0,
+      lastUsed: "Never used",
       color: "from-teal-400 to-cyan-500",
-      link: "https://ngo-heal.vercel.app/"
+      link: "https://ngo-heal.vercel.app/",
+      used: false
     },
     {
       icon: MessageCircle,
@@ -75,18 +80,22 @@ const Dashboard = ({ userName }: DashboardProps) => {
       progress: 75,
       lastUsed: "3 days ago",
       color: "from-indigo-400 to-purple-500",
-      link: "https://carecircle-women-unite.vercel.app/"
+      link: "https://carecircle-women-unite.vercel.app/",
+      used: true
     },
     {
       icon: Shield,
       title: "VaxAlert",
       description: "Vaccination reminders",
-      progress: 55,
-      lastUsed: "1 week ago",
+      progress: 0,
+      lastUsed: "Never used",
       color: "from-pink-400 to-rose-500",
-      link: "https://vaxalert2.vercel.app/"
+      link: "https://vaxalert2.vercel.app/",
+      used: false
     }
   ];
+
+  const usedFeaturesCount = personalizedFeatures.filter(f => f.used).length;
 
   const recentActivity = [
     { 
@@ -167,9 +176,6 @@ const Dashboard = ({ userName }: DashboardProps) => {
                 </p>
               </div>
               <div className="flex gap-2">
-                <Button variant="secondary" size="icon">
-                  <Bell className="w-5 h-5" />
-                </Button>
                 <Button 
                   variant="secondary" 
                   size="icon"
@@ -184,7 +190,7 @@ const Dashboard = ({ userName }: DashboardProps) => {
                         <p className="text-muted-foreground">Member since: <span className="text-foreground">March 2023</span></p>
                         <p className="text-muted-foreground">Time with Saarthi: <span className="text-foreground">1.2 years</span></p>
                         <p className="text-muted-foreground">Health Score: <span className="text-green-600 font-medium">85/100</span></p>
-                        <p className="text-muted-foreground">Features Used: <span className="text-foreground">6/8</span></p>
+                        <p className="text-muted-foreground">Features Used: <span className="text-foreground">{usedFeaturesCount}/8</span></p>
                       </div>
                     </div>
                   )}

@@ -10,14 +10,16 @@ import heroWomen from '@/assets/hero-women.jpg';
 
 const Index = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userName] = useState("Priya");
+  const [userName, setUserName] = useState("Priya");
 
-  const handleLogin = () => {
+  const handleLogin = (name: string) => {
     setIsLoggedIn(true);
+    setUserName(name);
   };
 
   const handleLogout = () => {
     setIsLoggedIn(false);
+    setUserName("");
   };
 
   // If logged in, show dashboard
@@ -27,6 +29,7 @@ const Index = () => {
         <Header 
           isLoggedIn={isLoggedIn} 
           userDashboard={true}
+          userName={userName}
           onLogin={handleLogin} 
           onLogout={handleLogout} 
         />
@@ -122,6 +125,7 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       <Header 
         isLoggedIn={isLoggedIn} 
+        userName={userName}
         onLogin={handleLogin} 
         onLogout={handleLogout} 
       />
@@ -149,7 +153,7 @@ const Index = () => {
               </p>
               
               <div className="flex flex-col sm:flex-row gap-4">
-                <Button onClick={handleLogin} className="btn-hero text-lg px-8 py-4">
+                <Button onClick={() => handleLogin("Priya")} className="btn-hero text-lg px-8 py-4">
                   Join Saarthi Today
                   <ArrowRight className="ml-2 w-5 h-5" />
                 </Button>
@@ -237,7 +241,7 @@ const Index = () => {
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button onClick={handleLogin} className="btn-hero text-lg px-8 py-4">
+            <Button onClick={() => handleLogin("Priya")} className="btn-hero text-lg px-8 py-4">
               Get Started Today
               <ArrowRight className="ml-2 w-5 h-5" />
             </Button>
