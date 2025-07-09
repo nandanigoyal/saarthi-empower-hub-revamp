@@ -16,7 +16,7 @@ const SaarthiLogo = ({ className = '', size = 'md' }: SaarthiLogoProps) => {
   return (
     <div className={`${sizeClasses[size]} ${className}`}>
       <img 
-        src="/lovable-uploads/d1d9c4de-5c9b-4c52-92aa-8824226b4730.png" 
+        src="/images/d1d9c4de-5c9b-4c52-92aa-8824226b4730.png" 
         alt="Saarthi Logo" 
         className="w-full h-full object-contain rounded-full"
       />
