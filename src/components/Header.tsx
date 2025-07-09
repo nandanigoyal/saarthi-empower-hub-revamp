@@ -47,12 +47,16 @@ const Header = ({ isLoggedIn, userDashboard = false, userName = 'User', onLogin,
     setSettingsDropdownOpen(!settingsDropdownOpen);
   };
 
+  const handleExploreLogin = () => {
+    onLogin("User"); // Default name for explore modal login
+  };
+
   return (
     <>
       <header className="bg-background/95 backdrop-blur-sm border-b border-border/50 sticky top-0 z-40">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
-            {/* Logo - Left aligned */}
+            {/* Logo and Navigation - Left aligned */}
             <div className="flex items-center gap-8">
               <div className="flex items-center gap-3 cursor-pointer">
                 <SaarthiLogo size="md" />
@@ -63,7 +67,7 @@ const Header = ({ isLoggedIn, userDashboard = false, userName = 'User', onLogin,
               <nav className="hidden md:flex items-center space-x-8">
                 <button 
                   onClick={handleHomeClick}
-                  className="nav-link font-medium flex items-center gap-1"
+                  className="nav-link font-medium flex items-center gap-1 hover:text-primary transition-colors"
                 >
                   <Home className="w-4 h-4" />
                   Home
@@ -72,7 +76,7 @@ const Header = ({ isLoggedIn, userDashboard = false, userName = 'User', onLogin,
                 <div className="relative">
                   <button 
                     onClick={() => setIsExploreOpen(true)}
-                    className="nav-link font-medium flex items-center gap-1"
+                    className="nav-link font-medium flex items-center gap-1 hover:text-primary transition-colors"
                   >
                     Explore <ChevronDown className="w-4 h-4" />
                   </button>
@@ -80,13 +84,13 @@ const Header = ({ isLoggedIn, userDashboard = false, userName = 'User', onLogin,
 
                 <button 
                   onClick={() => setIsAboutOpen(true)}
-                  className="nav-link font-medium"
+                  className="nav-link font-medium hover:text-primary transition-colors"
                 >
                   About
                 </button>
 
                 {userDashboard && (
-                  <button className="nav-link font-medium">
+                  <button className="nav-link font-medium hover:text-primary transition-colors">
                     Dashboard
                   </button>
                 )}
@@ -219,7 +223,7 @@ const Header = ({ isLoggedIn, userDashboard = false, userName = 'User', onLogin,
       </header>
 
       {/* Modals */}
-      <ExploreModal isOpen={isExploreOpen} onClose={() => setIsExploreOpen(false)} />
+      <ExploreModal isOpen={isExploreOpen} onClose={() => setIsExploreOpen(false)} onLogin={handleExploreLogin} />
       <AboutModal isOpen={isAboutOpen} onClose={() => setIsAboutOpen(false)} />
       <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} onLogin={onLogin} />
       <HelpPopup isOpen={isHelpOpen} onClose={() => setIsHelpOpen(false)} />
