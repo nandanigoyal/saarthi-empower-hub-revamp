@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Menu, X, ChevronDown, User, Settings, LogOut, ArrowLeft, Home } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -49,6 +48,10 @@ const Header = ({ isLoggedIn, userDashboard = false, userName = 'User', onLogin,
 
   const handleExploreLogin = () => {
     onLogin("User"); // Default name for explore modal login
+  };
+
+  const handleAuthLogin = (name: string) => {
+    onLogin(name);
   };
 
   return (
@@ -225,7 +228,7 @@ const Header = ({ isLoggedIn, userDashboard = false, userName = 'User', onLogin,
       {/* Modals */}
       <ExploreModal isOpen={isExploreOpen} onClose={() => setIsExploreOpen(false)} onLogin={handleExploreLogin} />
       <AboutModal isOpen={isAboutOpen} onClose={() => setIsAboutOpen(false)} />
-      <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} onLogin={onLogin} />
+      <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} onLogin={handleAuthLogin} />
       <HelpPopup isOpen={isHelpOpen} onClose={() => setIsHelpOpen(false)} />
     </>
   );

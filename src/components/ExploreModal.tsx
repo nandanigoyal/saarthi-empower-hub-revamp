@@ -1,13 +1,13 @@
-
 import { X, Star, Users, Calendar, Stethoscope, FileText, Heart, Shield, Activity, Database, Building2, Syringe, MessageCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 interface ExploreModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onLogin: () => void;
 }
 
-const ExploreModal = ({ isOpen, onClose }: ExploreModalProps) => {
+const ExploreModal = ({ isOpen, onClose, onLogin }: ExploreModalProps) => {
   if (!isOpen) return null;
 
   const experiences = [
@@ -138,13 +138,7 @@ const ExploreModal = ({ isOpen, onClose }: ExploreModalProps) => {
 
   const handleGetStarted = () => {
     onClose();
-    // Trigger login modal
-    setTimeout(() => {
-      const loginButton = document.querySelector('[data-auth-modal]') as HTMLButtonElement;
-      if (loginButton) {
-        loginButton.click();
-      }
-    }, 100);
+    onLogin();
   };
 
   const handleLearnMore = () => {
