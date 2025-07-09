@@ -141,7 +141,7 @@ const Index = () => {
               
               <h1 className="text-4xl lg:text-6xl font-bold leading-tight mb-6">
                 Your Trusted
-                <span className="block text-transparent bg-clip-text bg-gradient-to-r from-yellow-200 to-orange-200">
+                <span className="block text-transparent bg-clip-text bg-gradient-to-r from-yellow-200 to-orange-200 py-2">
                   Digital Saarthi
                 </span>
                 for Complete Women's Wellness
