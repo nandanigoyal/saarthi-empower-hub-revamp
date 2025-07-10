@@ -65,7 +65,7 @@ const Index = () => {
       fullDescription: "Professional video consultations and secure chat with certified gynecologists for expert medical advice",
       users: "12k+ users",
       color: "from-emerald-400 to-green-500",
-      link: "https://gyno3-saar.onrender.com"
+      link: "https://gyno3-saar.onrender.com/"
     },
     {
       icon: Database,
