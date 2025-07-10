@@ -93,7 +93,7 @@ const ExploreModal = ({ isOpen, onClose, onLogin }: ExploreModalProps) => {
       name: "GynConnect", 
       users: "12k+", 
       color: "from-emerald-400 to-green-500", 
-      link: "https://gyno-connect-oasis.vercel.app/" 
+      link: "https://gyno3-saar.onrender.com" 
     },
     { 
       icon: Database, 
