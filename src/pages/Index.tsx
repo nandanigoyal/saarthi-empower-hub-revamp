@@ -154,7 +154,7 @@ const Index = () => {
               
               <div className="flex flex-col sm:flex-row gap-4">
                 <Button onClick={() => handleLogin("Priya")} className="btn-hero text-lg px-8 py-4">
-                  Join Saarthi Today
+                  Join Saarthi
                   <ArrowRight className="ml-2 w-5 h-5" />
                 </Button>
                 <Button onClick={() => {
