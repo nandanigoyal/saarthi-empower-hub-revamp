@@ -30,7 +30,7 @@ const Dashboard = ({ userName }: DashboardProps) => {
       progress: 70,
       lastUsed: "5 days ago",
       color: "from-blue-400 to-cyan-500",
-      link: "https://symptoscan-2mg1.onrender.com/",
+      link: "https://saarthi2-167k.vercel.app/",
       used: true
     },
     {
@@ -40,7 +40,8 @@ const Dashboard = ({ userName }: DashboardProps) => {
       progress: 60,
       lastUsed: "1 week ago",
       color: "from-emerald-400 to-green-500",
-      link: "https://gyno3.vercel.app/",
+      // link: "https://gyno-connect-oasis.vercel.app/",
+      link:"https://gyno3.vercel.app/",
       used: true
     },
     {
